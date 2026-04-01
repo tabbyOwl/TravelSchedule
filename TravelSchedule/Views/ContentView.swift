@@ -11,7 +11,6 @@ import OpenAPIURLSession
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
         animation: .default)
@@ -19,9 +18,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            
             Text("...")
-            
         }.onAppear {
             Task {
                 await testFetchNearestStations()
@@ -35,7 +32,6 @@ struct ContentView: View {
             }
         }
     }
-    
     
     func testFetchNearestStations() async {
         do {
@@ -172,7 +168,6 @@ struct ContentView: View {
         return formatter.string(from: Date())
     }
 }
-
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
