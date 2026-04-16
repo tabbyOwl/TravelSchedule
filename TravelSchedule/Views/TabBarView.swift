@@ -11,12 +11,12 @@ struct TabBarView: View {
     var body: some View {
         TabView {
             Tab("", systemImage: "arrow.up.message.fill") {
-                Text("view")
+                MainSearchView(viewModel: MainSearchViewModel())
             }
             
             
             Tab("", systemImage: "gearshape") {
-                Text("view")
+                Text("Настройки")
             }
         }
         

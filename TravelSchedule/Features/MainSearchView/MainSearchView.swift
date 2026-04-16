@@ -18,17 +18,8 @@ struct MainSearchView: View {
     var body: some View {
         NavigationStack {
             content
-            
             if viewModel.areCitiesSelected {
-                NavigationLink(destination: EmptyView()) {
-                    Text("Найти")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 17, weight: .bold))
-                }
-                .padding()
-                .frame(width: MainSearchLayout.searchButtonWidth)
-                .background(.blueUniversal)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                searchButton
             }
         }
     }
@@ -44,40 +35,19 @@ private extension MainSearchView {
         .background(.blueUniversal)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         
-            
-        }
+        
     }
+}
 
 private extension MainSearchView {
     var inputViews: some View {
         VStack() {
-            inputRowView(station: viewModel.fromStation)
-            inputRowView(station: viewModel.toStation)
+            InputRowView(station: $viewModel.fromStation)
+            InputRowView(station: $viewModel.toStation)
         }
         .frame(width: MainSearchLayout.inputWidth)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        }
-    }
-
-private extension MainSearchView {
-    func inputRowView(station: Station) -> some View {
-        
-        NavigationLink(destination: EmptyView()) {
-            rowView(title: station.title)
-        }
-    }
-}
-
-
-private extension MainSearchView {
-    func rowView(title: String) -> some View {
-        let isSelected = viewModel.isSelected(title: title)
-        return Text(title)
-            .foregroundStyle(isSelected ? .blackUniversal : .grayUniversal)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .lineLimit(1)
-            .padding()
     }
 }
 
@@ -89,6 +59,20 @@ private extension MainSearchView {
                 .background(.white)
                 .clipShape(.circle)
         }
+    }
+}
+
+private extension MainSearchView {
+    var searchButton: some View {
+        NavigationLink(destination: EmptyView()) {
+            Text("Найти")
+                .foregroundStyle(.white)
+                .font(.system(size: 17, weight: .bold))
+        }
+        .padding()
+        .frame(width: MainSearchLayout.searchButtonWidth)
+        .background(.blueUniversal)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 

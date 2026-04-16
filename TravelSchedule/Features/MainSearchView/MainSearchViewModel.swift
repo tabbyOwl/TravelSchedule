@@ -4,7 +4,9 @@
 //
 //  Created by Svetlana on 2026/4/16.
 //
+import SwiftUI
 
+@Observable
 class MainSearchViewModel {
     
     private var from: Station = Station(title: Strings.fromPlaceholder, code: "", type: "")
