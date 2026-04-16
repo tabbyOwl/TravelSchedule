@@ -34,8 +34,6 @@ private extension MainSearchView {
         .padding()
         .background(.blueUniversal)
         .clipShape(RoundedRectangle(cornerRadius: 20))
-        
-        
     }
 }
 

@@ -21,15 +21,15 @@ struct CitySearchView: View {
     
     var body: some View {
         content
-            
             .searchable(text: $viewModel.searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Введите город")
+                        prompt: "Введите запрос")
 
             .onAppear {
                 if isDismissing {
                     dismiss()
                 }
+                viewModel.loadCities()
             }
             .toolbarVisibility(.hidden, for: .tabBar)
     }
@@ -47,7 +47,6 @@ struct CitySearchView: View {
 private extension CitySearchView {
     var emptyView: some View {
         Text("Город не найден")
-            .foregroundColor(.blackUniversal)
             .font(.system(size: 24, weight: .bold))
     }
 }

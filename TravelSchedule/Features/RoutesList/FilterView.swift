@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct FilterView: View {
+    
     @Binding private var selectedIntervals: Set<TimeInterval>
     @State private var currentSelectedIntervals: Set<TimeInterval> = []
     @Binding private var showTransfers: Bool

@@ -24,7 +24,7 @@ struct StationSearchView: View {
         content
             .searchable(text: $viewModel.searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Введите станцию")
+                        prompt: "Введите запрос")
     }
 }
     
@@ -47,7 +47,6 @@ private extension StationSearchView {
 private extension StationSearchView {
     var emptyView: some View {
         Text("Станция не найдена")
-            .foregroundColor(.blackUniversal)
             .font(.system(size: 24, weight: .bold))
     }
 }

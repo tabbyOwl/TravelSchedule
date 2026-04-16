@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RouteListView: View {
+    
     @StateObject private var viewModel: RouteListViewModel
     
     init(viewModel: RouteListViewModel) {
@@ -48,7 +49,6 @@ private extension RouteListView {
             Spacer()
             Text("Нет доступных маршрутов")
                 .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(.blackUniversal)
             Spacer()
             if viewModel.isFiltersOn {
                     filterButton

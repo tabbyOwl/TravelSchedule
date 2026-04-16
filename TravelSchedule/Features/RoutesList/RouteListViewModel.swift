@@ -19,10 +19,16 @@ class RouteListViewModel: ObservableObject {
         selectedIntervals.isEmpty ? segments :
         segments.filter { segment in
             guard let time = getMinutes(from: segment.departure) else { return false }
+            
             return selectedIntervals.contains { interval in
                 if let startTime = getMinutes(from: interval.startTime),
                    let endTime = getMinutes(from: interval.endTime) {
-                    return time >= startTime && time <= endTime
+                    
+                    if startTime <= endTime {
+                        return time >= startTime && time <= endTime
+                    } else {
+                        return (time >= startTime || time <= endTime)
+                    }
                 }
                 return false
             }

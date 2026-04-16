@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct RouteCardView: View {
+    
     private let segment: Segment
     
     init(segment: Segment) {

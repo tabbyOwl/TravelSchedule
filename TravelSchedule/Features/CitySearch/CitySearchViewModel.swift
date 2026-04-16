@@ -26,4 +26,8 @@ class CitySearchViewModel: ObservableObject {
     var filteredCities: [Settlement] {
         _searchText.isEmpty ? citiesList: cities.filter { $0.title.localizedCaseInsensitiveContains(searchText)}
     }
+    
+    func loadCities() {
+           cities = citiesList
+       }
 }

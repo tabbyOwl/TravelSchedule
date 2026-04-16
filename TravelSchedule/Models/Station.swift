@@ -4,7 +4,6 @@
 //
 //  Created by Svetlana on 2026/4/16.
 //
-
 import Foundation
 
 struct Station: Identifiable {
