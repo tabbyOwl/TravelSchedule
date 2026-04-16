@@ -64,7 +64,7 @@ private extension MainSearchView {
 
 private extension MainSearchView {
     var searchButton: some View {
-        NavigationLink(destination: EmptyView()) {
+        NavigationLink(destination: RouteListView(viewModel: RouteListViewModel(from: viewModel.fromStation, to: viewModel.toStation))) {
             Text("Найти")
                 .foregroundStyle(.white)
                 .font(.system(size: 17, weight: .bold))

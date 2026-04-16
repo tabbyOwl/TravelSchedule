@@ -21,14 +21,17 @@ struct CitySearchView: View {
     
     var body: some View {
         content
+            
             .searchable(text: $viewModel.searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
                         prompt: "Введите город")
+
             .onAppear {
                 if isDismissing {
                     dismiss()
                 }
             }
+            .toolbarVisibility(.hidden, for: .tabBar)
     }
     
     @ViewBuilder
