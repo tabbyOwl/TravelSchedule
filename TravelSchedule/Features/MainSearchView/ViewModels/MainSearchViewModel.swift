@@ -9,9 +9,11 @@ import SwiftUI
 @Observable
 class MainSearchViewModel {
     
+    // MARK: - Private Properties
     private var from: Station = Station(title: Strings.fromPlaceholder, code: "", type: "")
     private var to: Station = Station(title: Strings.toPlaceholder, code: "", type: "")
     
+    // MARK: - Computed Properties
     func isSelected(title: String) -> Bool {
         title != Strings.fromPlaceholder && title != Strings.toPlaceholder
     }
@@ -41,6 +43,7 @@ class MainSearchViewModel {
         return !fromTitle.isEmpty && !toTitle.isEmpty && fromTitle != Strings.fromPlaceholder && toTitle != Strings.toPlaceholder
     }
     
+    // MARK: - Actions
     func swap() {
         let temp = from
         from = to

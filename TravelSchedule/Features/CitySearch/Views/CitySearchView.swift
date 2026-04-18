@@ -9,16 +9,23 @@ import SwiftUI
 
 struct CitySearchView: View {
     
+    // MARK: - Bindings
     @Binding private var station: Station
-    @StateObject private var viewModel: CitySearchViewModel
+    
+    // MARK: - State
+    @State private var viewModel: CitySearchViewModel
     @State private var isDismissing: Bool = false
+    
+    // MARK: - Environment
     @Environment(\.dismiss) private var dismiss
     
+    // MARK: - Init
     init(station: Binding<Station>, viewModel: CitySearchViewModel) {
         _station = station
-        _viewModel = StateObject(wrappedValue: viewModel)
+        self.viewModel = viewModel
     }
     
+    // MARK: - Body
     var body: some View {
         content
             .searchable(text: $viewModel.searchText,
@@ -34,32 +41,14 @@ struct CitySearchView: View {
             .toolbarVisibility(.hidden, for: .tabBar)
     }
     
+    // MARK: - Content
     @ViewBuilder
     private var content: some View {
         if viewModel.hasNoResults {
-            emptyView
+            NoDataView(text: "Город не найден")
         } else {
-            listView
+            CitySearchListView(station: $station, isDismissing: $isDismissing, cities: viewModel.filteredCities)
         }
-    }
-}
-
-private extension CitySearchView {
-    var emptyView: some View {
-        Text("Город не найден")
-            .font(.system(size: 24, weight: .bold))
-    }
-}
-
-private extension CitySearchView {
-    var listView: some View {
-        List(viewModel.filteredCities) { city in
-            NavigationLink(destination: StationSearchView(station: $station, viewModel: StationSearchViewModel(city: city), isDismissing: $isDismissing)) {
-                Text(city.title)
-            }
-        }
-        .listStyle(.plain)
-        .navigationTitle("Выбор города")
     }
 }
 

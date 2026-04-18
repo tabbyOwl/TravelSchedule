@@ -4,14 +4,14 @@
 //
 //  Created by Svetlana on 2026/4/16.
 //
-import Combine
 import Foundation
 
-class StationSearchViewModel: ObservableObject {
+@Observable
+class StationSearchViewModel {
     
-    @Published private var city: Settlement
-    @Published private var _isLoading: Bool = false
-    @Published private var _searchText: String = ""
+    private var city: Settlement
+    private var _isLoading: Bool = false
+    private var _searchText: String = ""
     
     init(city: Settlement) {
         self.city = city

@@ -51,4 +51,4 @@ func generateSegments(count: Int, startHour: Int) -> [Segment] {
     }
 }
 
-let mockSegments = generateSegments(count: 24, startHour: 0)
+let mockSegments = generateSegments(count: 12, startHour: 0)

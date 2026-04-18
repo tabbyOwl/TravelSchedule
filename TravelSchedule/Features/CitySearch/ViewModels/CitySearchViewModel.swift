@@ -5,15 +5,16 @@
 //  Created by Svetlana on 2026/4/16.
 //
 import Foundation
-import Combine
 
-class CitySearchViewModel: ObservableObject {
+@Observable
+class CitySearchViewModel {
     
-    @Published private var cities: [Settlement] = []
-    @Published private var _searchText: String = ""
-    
+    // MARK: - Private Properties
+    private var cities: [Settlement] = []
+    private var _searchText: String = ""
     private var citiesList = mockCitiesList
     
+    // MARK: - Computed Properties
     var searchText: String {
         get { _searchText }
         set { _searchText = newValue }

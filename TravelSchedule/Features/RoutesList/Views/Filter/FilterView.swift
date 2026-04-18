@@ -8,13 +8,20 @@ import SwiftUI
 
 struct FilterView: View {
     
-    @Binding private var selectedIntervals: Set<TimeInterval>
-    @State private var currentSelectedIntervals: Set<TimeInterval> = []
+    // MARK: - Bindings
     @Binding private var showTransfers: Bool
+    @Binding private var selectedIntervals: Set<TimeInterval>
+    
+    // MARK: - State
+    @State private var currentSelectedIntervals: Set<TimeInterval> = []
+    
+    // MARK: - Environment
     @Environment(\.dismiss) private var dismiss
     
+    // MARK: - Private Properties
     private var timeIntervals: [TimeInterval] = TimeIntervals.intervals
     
+    // MARK: - Init
     init(selectedIntervals: Binding<Set<TimeInterval>>,
          showTransfers: Binding<Bool>) {
         _selectedIntervals = selectedIntervals
@@ -22,6 +29,7 @@ struct FilterView: View {
         _showTransfers = showTransfers
     }
     
+    // MARK: - Body
     var body: some View {
         VStack(alignment: .leading) {
             timeSection
@@ -30,10 +38,9 @@ struct FilterView: View {
             applyButton
         }
     }
-}
-
-private extension FilterView {
-    var timeSection: some View {
+    
+    // MARK: - Views
+    private var timeSection: some View {
         VStack(alignment: .leading) {
             Text("Время отправления")
                 .padding(.horizontal, 16)
@@ -45,10 +52,34 @@ private extension FilterView {
             }
         }
     }
-}
-
-private extension FilterView {
-    func timeRow(_ interval: TimeInterval) -> some View {
+    
+    private var transfersSection: some View {
+        VStack(alignment: .leading) {
+            Text("Показывать варианты с пересадками")
+                .padding(.horizontal, 16)
+                .font(.system(size: 24, weight: .bold))
+            
+            transferRow(title: "Да", isSelected: showTransfers)
+            transferRow(title: "Нет", isSelected: !showTransfers)
+        }
+    }
+    
+    private var applyButton: some View {
+        Button("Применить фильтры") {
+            dismiss()
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(.blueUniversal)
+        .foregroundStyle(.white)
+        .font(.system(size: 17, weight: .bold))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .padding()
+    }
+    
+    // MARK: - Rows
+    
+    private func timeRow(_ interval: TimeInterval) -> some View {
         let isSelected = currentSelectedIntervals.contains(interval)
         
         return HStack {
@@ -62,35 +93,8 @@ private extension FilterView {
             toggleTime(interval)
         }
     }
-}
-
-private extension FilterView {
-    func toggleTime(_ interval: TimeInterval) {
-        if currentSelectedIntervals.contains(interval) {
-            currentSelectedIntervals.remove(interval)
-            
-        } else {
-            currentSelectedIntervals.insert(interval)
-        }
-        selectedIntervals = currentSelectedIntervals
-    }
-}
-
-private extension FilterView {
-    var transfersSection: some View {
-        VStack(alignment: .leading) {
-            Text("Показывать варианты с пересадками")
-                .padding(.horizontal, 16)
-                .font(.system(size: 24, weight: .bold))
-            
-            transferRow(title: "Да", isSelected: showTransfers)
-            transferRow(title: "Нет", isSelected: !showTransfers)
-        }
-    }
-}
-
-private extension FilterView {
-    func transferRow(title: String, isSelected: Bool) -> some View {
+    
+    private func transferRow(title: String, isSelected: Bool) -> some View {
         HStack {
             Text(title)
             Spacer()
@@ -101,20 +105,16 @@ private extension FilterView {
             showTransfers.toggle()
         }
     }
-}
-
-private extension FilterView {
-    var applyButton: some View {
-        Button("Применить фильтры") {
-            dismiss()
+    
+    // MARK: - Actions
+    private  func toggleTime(_ interval: TimeInterval) {
+        if currentSelectedIntervals.contains(interval) {
+            currentSelectedIntervals.remove(interval)
+            
+        } else {
+            currentSelectedIntervals.insert(interval)
         }
-        .frame(maxWidth: .infinity)
-        .padding()
-        .background(.blueUniversal)
-        .foregroundStyle(.white)
-        .font(.system(size: 17, weight: .bold))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .padding()
+        selectedIntervals = currentSelectedIntervals
     }
 }
 
