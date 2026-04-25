@@ -16,7 +16,7 @@ struct TabBarView: View {
             
             
             Tab("", systemImage: "gearshape") {
-                Text("Настройки")
+                SettingsView()
             }
         }
         

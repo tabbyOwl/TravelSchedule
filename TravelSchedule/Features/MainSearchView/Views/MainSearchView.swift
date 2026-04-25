@@ -13,7 +13,7 @@ struct MainSearchView: View {
     @State private var viewModel = MainSearchViewModel()
     @State private var isStoryPresented: Bool = false
     @State private var selectedStory: StoryGroup?
-    
+
     // MARK: - Init
     init(viewModel: MainSearchViewModel) {
         self.viewModel = viewModel
@@ -36,6 +36,7 @@ struct MainSearchView: View {
             
             Spacer()
         }
+
         .overlay(
             ZStack {
                 if isStoryPresented {
@@ -43,7 +44,6 @@ struct MainSearchView: View {
                         .transition(.opacity)
                         .onTapGesture {
                                 isStoryPresented = true
-                            
                         }
                 }
             }

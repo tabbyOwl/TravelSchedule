@@ -26,6 +26,7 @@ struct MainStoriesView: View {
             .padding(.top, 57)
             .padding(.trailing, 12)
         }
+        .toolbarVisibility(.hidden, for: .tabBar)
     }
 }
 

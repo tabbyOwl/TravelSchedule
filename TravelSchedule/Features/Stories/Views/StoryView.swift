@@ -12,12 +12,15 @@ struct StoryView: View {
     
     var body: some View {
         ZStack {
-            Color.blackUniversal
+            Color.black
                 .ignoresSafeArea()
             Image(story.backgroundImage)
+                
                 .resizable()
                 .scaledToFill()
                 .clipShape(RoundedRectangle(cornerRadius: 40))
+                .ignoresSafeArea(edges: .horizontal)
+                .padding(.top)
         }
         .overlay(
             VStack {
