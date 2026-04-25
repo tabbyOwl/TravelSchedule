@@ -6,6 +6,7 @@
 //
 import Foundation
 
+
 enum SystemIcons {
     static let chevronRight = "chevron.right"
 }
@@ -19,3 +20,4 @@ enum MainSearchLayout {
     static let inputWidth: CGFloat = 259
     static let searchButtonWidth: CGFloat = 150
 }
+

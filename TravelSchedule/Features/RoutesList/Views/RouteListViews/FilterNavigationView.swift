@@ -10,14 +10,14 @@ import SwiftUI
 struct FilterNavigationView: View {
     
     // MARK: - Bindings
-    @Binding private var selectedIntervals: Set<TimeInterval>
+    @Binding private var selectedIntervals: Set<ScheduleInterval>
     @Binding private var showTransfers: Bool
     
     // MARK: - Private properties
     private var isFiltersOn: Bool
     
     // MARK: - Bindings
-    init(selectedIntervals: Binding<Set<TimeInterval>>, showTransfers: Binding<Bool>, isFiltersOn: Bool) {
+    init(selectedIntervals: Binding<Set<ScheduleInterval>>, showTransfers: Binding<Bool>, isFiltersOn: Bool) {
         _selectedIntervals = selectedIntervals
         _showTransfers = showTransfers
         self.isFiltersOn = isFiltersOn

@@ -10,27 +10,39 @@ import SwiftUI
 struct MainSearchInputView: View {
     
     // MARK: - Bindings
-    @Binding private var fromStation: Station
-    @Binding private var toStation: Station
+    @Binding private var viewModel: MainSearchViewModel
     
     // MARK: - Init
-    init(fromStation: Binding<Station>, toStation: Binding<Station>) {
-        _fromStation = fromStation
-        _toStation = toStation
+    init(viewModel: Binding<MainSearchViewModel>) {
+        _viewModel = viewModel
     }
     
     // MARK: - Body
     var body: some View {
-        VStack() {
-            InputRowView(station: $fromStation)
-            InputRowView(station: $toStation)
-        }
-        .frame(width: MainSearchLayout.inputWidth)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+       
+            HStack(spacing: 16) {
+                inputRows
+                MainSearchSwapButton(action: viewModel.swap)
+            }
+            .padding(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
+            .background(.blueUniversal)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .padding()
+        
+        
     }
+
+
+private var inputRows: some View {
+    VStack {
+        InputRowView(station: $viewModel.fromStation)
+        InputRowView(station: $viewModel.toStation)
+    }
+    .background(.white)
+    .clipShape(RoundedRectangle(cornerRadius: 20))
+}
 }
 
 #Preview {
-    MainSearchInputView(fromStation: .constant(Station(title: "Лениградский вокзал", code: "", type: "")), toStation: .constant(Station(title: "Московский вокзал", code: "", type: "")))
+    MainSearchInputView(viewModel: .constant(MainSearchViewModel()))
 }

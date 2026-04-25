@@ -10,19 +10,19 @@ struct FilterView: View {
     
     // MARK: - Bindings
     @Binding private var showTransfers: Bool
-    @Binding private var selectedIntervals: Set<TimeInterval>
+    @Binding private var selectedIntervals: Set<ScheduleInterval>
     
     // MARK: - State
-    @State private var currentSelectedIntervals: Set<TimeInterval> = []
+    @State private var currentSelectedIntervals: Set<ScheduleInterval> = []
     
     // MARK: - Environment
     @Environment(\.dismiss) private var dismiss
     
     // MARK: - Private Properties
-    private var timeIntervals: [TimeInterval] = TimeIntervals.intervals
+    private var timeIntervals: [ScheduleInterval] = TimeIntervals.intervals
     
     // MARK: - Init
-    init(selectedIntervals: Binding<Set<TimeInterval>>,
+    init(selectedIntervals: Binding<Set<ScheduleInterval>>,
          showTransfers: Binding<Bool>) {
         _selectedIntervals = selectedIntervals
         self.currentSelectedIntervals = selectedIntervals.wrappedValue
@@ -79,7 +79,7 @@ struct FilterView: View {
     
     // MARK: - Rows
     
-    private func timeRow(_ interval: TimeInterval) -> some View {
+    private func timeRow(_ interval: ScheduleInterval) -> some View {
         let isSelected = currentSelectedIntervals.contains(interval)
         
         return HStack {
@@ -107,7 +107,7 @@ struct FilterView: View {
     }
     
     // MARK: - Actions
-    private  func toggleTime(_ interval: TimeInterval) {
+    private  func toggleTime(_ interval: ScheduleInterval) {
         if currentSelectedIntervals.contains(interval) {
             currentSelectedIntervals.remove(interval)
             
