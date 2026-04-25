@@ -17,7 +17,7 @@ struct SettingsView: View {
                 .tint(.blueUniversal)
                 .frame(width: 375, height: 60)
                
-            NavigationLink(destination: CopyrightView()) {
+            NavigationLink(destination: TermsView()) {
                 HStack {
                     Text("Пользовательское соглашение")
                     Spacer()
@@ -27,15 +27,17 @@ struct SettingsView: View {
             }
             .frame(width: 375, height: 60)
             Spacer()
+            
+            VStack(spacing: 16) {
+                Text("Приложение использует API «Яндекс.Расписания»")
+                Text("Версия 1.0 (beta)")
+            }
+            .padding(.bottom, 24)
+            .font(.system(size: 12))
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .foregroundStyle(.primary)
-        VStack(spacing: 16) {
-            Text("Приложение использует API «Яндекс.Расписания»")
-            Text("Версия 1.0 (beta)")
-        }
-        .padding(.bottom, 24)
-        .font(.system(size: 12))
+        
     }
     
 }
