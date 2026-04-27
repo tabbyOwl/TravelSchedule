@@ -9,12 +9,15 @@ import SwiftUI
 
 struct StoryView: View {
     
+    //MARK: - Private properties
     private let story: Story
     
+    //MARK: - Init
     init(story: Story) {
         self.story = story
     }
     
+    //MARK: - Body
     var body: some View {
         ZStack {
             Color.black

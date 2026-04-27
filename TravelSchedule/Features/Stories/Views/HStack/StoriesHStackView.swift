@@ -8,26 +8,25 @@ import SwiftUI
 
 struct StoriesHStackView: View {
     
+    @State private var storiesGroups: [StoryGroup] = []
     //MARK: - Bindings
     @Binding private var viewedStories: [Int]
     @Binding private var selectedGroup: StoryGroup?
     @Binding private var isPresented: Bool
     
     //MARK: - Private properties
-    private let storiesGroups: [StoryGroup]
+    
     private let animation: Namespace.ID
     
     //MARK: - Init
     init(viewedStories: Binding<[Int]>,
          selectedGroup: Binding<StoryGroup?>,
          isPresented: Binding<Bool>,
-         storiesGroups: [StoryGroup],
          animation: Namespace.ID) {
         
         _viewedStories = viewedStories
         _selectedGroup = selectedGroup
         _isPresented = isPresented
-        self.storiesGroups = storiesGroups
         self.animation = animation
     }
     
@@ -52,12 +51,15 @@ struct StoriesHStackView: View {
             .frame(maxHeight: .infinity)
             .fixedSize(horizontal: false, vertical: true)
         }
+        .onAppear {
+            self.storiesGroups = StoriesMaker.makeStoriesGroups()
+        }
     }
 }
 
 #Preview {
     @Previewable
     @Namespace var animation
-    StoriesHStackView(viewedStories: .constant([]), selectedGroup: .constant(mockStoryGroups.first), isPresented: .constant(false), storiesGroups: mockStoryGroups, animation: animation)
+    StoriesHStackView(viewedStories: .constant([]), selectedGroup: .constant(mockStoryGroups.first), isPresented: .constant(false), animation: animation)
 }
 

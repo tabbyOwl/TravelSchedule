@@ -43,8 +43,7 @@ struct StoriesProgressBar: View {
             }
     }
     
-    
-
+    //MARK: - Private methods
     private func timerTick() {
         withAnimation {
             currentProgress = timerConfiguration.nextProgress(progress: currentProgress)

@@ -25,13 +25,11 @@ struct MainSearchView: View {
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            let groups = StoriesMaker.makeStoriesGroups()
-            
             StoriesHStackView(viewedStories: $viewedStories,
                               selectedGroup: $selectedGroup,
                               isPresented: $isStoryPresented,
-                              storiesGroups: groups,
                               animation: animation)
+            
             
             MainSearchInputView(viewModel: $viewModel)
             
@@ -40,6 +38,9 @@ struct MainSearchView: View {
             }
             
             Spacer()
+        }
+        .onAppear {
+                viewedStories = getViewedStories()
         }
         .onChange(of: isStoryPresented) { _, newValue in
             if !newValue {
@@ -54,8 +55,7 @@ struct MainSearchView: View {
         }
     }
     
-    
-    
+    // MARK: - Private methods
     private func getViewedStories() -> [Int] {
         if let stories = UserDefaults.standard.array(forKey: UserDefaultsKeys.viewedStories) {
             return stories as? [Int] ?? []
@@ -63,7 +63,6 @@ struct MainSearchView: View {
         return []
     }
 }
-
 
 #Preview {
     MainSearchView(viewModel: MainSearchViewModel())

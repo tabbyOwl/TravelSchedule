@@ -4,7 +4,6 @@
 //
 //  Created by Svetlana on 2026/4/20.
 //
-import Foundation
 
 struct Story: Identifiable {
     let id: Int
