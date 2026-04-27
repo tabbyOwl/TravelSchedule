@@ -8,18 +8,26 @@
 import SwiftUI
 
 struct MainStoriesView: View {
-    private let stories: [Story]
-    @Binding var isPresented: Bool
     
+    //MARK: - Bindings
+    @Binding private var isPresented: Bool
+    
+    //MARK: - Private properties
+    private let stories: [Story]
+   
+    //MARK: - Init
     init(stories: [Story], isPresented: Binding<Bool>) {
         self.stories = stories
         _isPresented = isPresented
     }
+    
+    //MARK: - Body
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            StoriesView(stories: stories)
+            StoriesView(isPresented: $isPresented, stories: stories)
+            
             CloseButton(action: {
-                withAnimation(.easeOut) {
+                withAnimation(.linear(duration: 0.1)) {
                     isPresented = false
                 }
             })

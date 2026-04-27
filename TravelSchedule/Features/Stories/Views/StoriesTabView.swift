@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct StoriesTabView: View {
-    let stories: [Story]
-    @Binding var currentStoryIndex: Int
-
+    
+    //MARK: - Bindings
+    @Binding private var currentStoryIndex: Int
+    
+    //MARK: - Private properties
+    private let stories: [Story]
+    
+    //MARK: - Init
+    init(currentStoryIndex: Binding<Int>, stories: [Story]) {
+        _currentStoryIndex = currentStoryIndex
+        self.stories = stories
+    }
+    
+    //MARK: - Body
     var body: some View {
         TabView(selection: $currentStoryIndex) {
-           
-            ForEach(stories) { story in
+            ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
                 StoryView(story: story)
+                    .tag(index)
                     .onTapGesture {
                         didTapStory()
                     }
@@ -31,5 +42,5 @@ struct StoriesTabView: View {
 }
 
 #Preview {
-    StoriesTabView(stories: mockStoryGroups[1].stories, currentStoryIndex: .constant(0))
+    StoriesTabView(currentStoryIndex: .constant(0), stories: mockStoryGroups[1].stories)
 }

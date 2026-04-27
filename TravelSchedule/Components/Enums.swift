@@ -21,3 +21,6 @@ enum MainSearchLayout {
     static let searchButtonWidth: CGFloat = 150
 }
 
+enum UserDefaultsKeys {
+    static let viewedStories = "viewedStories"
+}

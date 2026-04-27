@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct StoryView: View {
-    let story: Story
+    
+    private let story: Story
+    
+    init(story: Story) {
+        self.story = story
+    }
     
     var body: some View {
         ZStack {

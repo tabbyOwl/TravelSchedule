@@ -14,7 +14,6 @@ struct TabBarView: View {
                 MainSearchView(viewModel: MainSearchViewModel())
             }
             
-            
             Tab("", systemImage: "gearshape") {
                 SettingsView()
             }

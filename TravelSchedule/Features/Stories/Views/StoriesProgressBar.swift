@@ -8,12 +8,19 @@ import SwiftUI
 import Combine
 
 struct StoriesProgressBar: View {
-    let storiesCount: Int
-    let timerConfiguration: TimerConfiguration
-    @Binding var currentProgress: CGFloat
+    
+    //MARK: - State
     @State private var timer: Timer.TimerPublisher
     @State private var cancellable: Cancellable?
+    
+    //MARK: - Bindings
+    @Binding private var currentProgress: CGFloat
+    
+    //MARK: - Private properties
+    private let storiesCount: Int
+    private let timerConfiguration: TimerConfiguration
 
+    //MARK: - Init
     init(storiesCount: Int, timerConfiguration: TimerConfiguration, currentProgress: Binding<CGFloat>) {
         self.storiesCount = storiesCount
         self.timerConfiguration = timerConfiguration
@@ -35,6 +42,8 @@ struct StoriesProgressBar: View {
                 timerTick()
             }
     }
+    
+    
 
     private func timerTick() {
         withAnimation {
