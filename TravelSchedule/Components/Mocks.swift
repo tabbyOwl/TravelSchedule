@@ -14,8 +14,6 @@ let baseStations = [
     "Ленинградский вокзал"
 ]
 
-let mockStation = Station(title: "Казанский вокзал", code: "", type: "")
-
 
 // MARK: - Cities
 func createCity(_ city: String) -> Settlement {

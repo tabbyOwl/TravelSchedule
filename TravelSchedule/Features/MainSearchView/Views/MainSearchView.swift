@@ -14,7 +14,7 @@ struct MainSearchView: View {
     @State private var isStoryPresented: Bool = false
     @State private var selectedGroup: StoryGroup?
     @State private var viewedStories: [Int] = []
-    
+ 
     @Namespace private var animation
     
     // MARK: - Init

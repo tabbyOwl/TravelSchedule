@@ -27,7 +27,7 @@ struct MainStoriesView: View {
             StoriesView(isPresented: $isPresented, stories: stories)
             
             CloseButton(action: {
-                withAnimation(.linear(duration: 0.1)) {
+                withAnimation(.linear(duration: 0.3)) {
                     isPresented = false
                 }
             })

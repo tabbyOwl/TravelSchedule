@@ -38,13 +38,18 @@ struct StoriesHStackView: View {
                     let isViewed = group.stories.allSatisfy { story in
                         viewedStories.contains(story.id)
                     }
-                    StoryStackCellView(preview: group.previewImage, text: group.title, isViewed: isViewed, animation: animation)
-                        .onTapGesture {
-                            selectedGroup = group
-                            withAnimation(.linear(duration: 0.2)) {
-                                isPresented = true
-                            }
+                    
+                    let viewModel = StoryStackCellViewModel(preview: group.previewImage,
+                                                                title: group.title,
+                                                                isViewed: isViewed)
+                    StoryStackCellView(viewModel: viewModel,
+                                       animation: animation)
+                    .onTapGesture {
+                        selectedGroup = group
+                        withAnimation(.linear(duration: 0.3)) {
+                            isPresented = true
                         }
+                    }
                 }
             }
             .padding(.init(top: 24, leading: 16, bottom: 24, trailing: 0))

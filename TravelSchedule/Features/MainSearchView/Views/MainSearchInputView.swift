@@ -19,28 +19,26 @@ struct MainSearchInputView: View {
     
     // MARK: - Body
     var body: some View {
-       
-            HStack(spacing: 16) {
-                inputRows
-                MainSearchSwapButton(action: viewModel.swap)
-            }
-            .padding(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
-            .background(.blueUniversal)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
-            .padding()
         
-        
+        HStack(spacing: 16) {
+            inputRows
+            MainSearchSwapButton(action: viewModel.swap)
+        }
+        .padding(.init(top: 16, leading: 16, bottom: 16, trailing: 16))
+        .background(.blueUniversal)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .padding()
     }
-
-
-private var inputRows: some View {
-    VStack {
-        InputRowView(station: $viewModel.fromStation)
-        InputRowView(station: $viewModel.toStation)
+    
+    
+    private var inputRows: some View {
+        VStack {
+            InputRowView(station: $viewModel.fromStation)
+            InputRowView(station: $viewModel.toStation)
+        }
+        .background(.white)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
-    .background(.white)
-    .clipShape(RoundedRectangle(cornerRadius: 20))
-}
 }
 
 #Preview {

@@ -23,7 +23,6 @@ struct StoryView: View {
             Color.black
                 .ignoresSafeArea()
             Image(story.backgroundImage)
-                
                 .resizable()
                 .scaledToFill()
                 .clipShape(RoundedRectangle(cornerRadius: 40))

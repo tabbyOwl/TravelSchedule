@@ -19,12 +19,12 @@ struct CarrierInfoView: View {
         VStack(alignment: .leading) {
             logo
             header
-            data(title: "E-mail", data: viewModel.carrier.email)
-            data(title: "Телефон", data: viewModel.carrier.phone)
+            data(title: CarrierInfoStrings.email, data: viewModel.carrier.email)
+            data(title: CarrierInfoStrings.phone, data: viewModel.carrier.phone)
             Spacer()
         }
         .padding(.leading, 16)
-    .navigationTitle("Информация о перевозчике")
+        .navigationTitle(CarrierInfoStrings.title)
     }
 }
 
@@ -33,7 +33,7 @@ private extension CarrierInfoView {
         Image(.carrierLogo)
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 393, height: 104)
+            .frame(width: CarrierInfoLayout.imageWidth, height: CarrierInfoLayout.imageHeight)
             .scaledToFit()
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 12))

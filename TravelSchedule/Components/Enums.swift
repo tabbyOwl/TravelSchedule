@@ -14,6 +14,8 @@ enum SystemIcons {
 enum Strings {
     static let fromPlaceholder = "Откуда"
     static let toPlaceholder = "Куда"
+    
+    
 }
 
 enum MainSearchLayout {
@@ -23,4 +25,15 @@ enum MainSearchLayout {
 
 enum UserDefaultsKeys {
     static let viewedStories = "viewedStories"
+}
+
+enum CarrierInfoLayout {
+    static let imageWidth: CGFloat = 393
+    static let imageHeight: CGFloat = 104
+}
+
+enum CarrierInfoStrings {
+    static let email = "E-mail"
+    static let phone = "Телефон"
+    static let title = "Информация о перевозчике"
 }

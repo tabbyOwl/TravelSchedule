@@ -9,39 +9,36 @@ import SwiftUI
 struct StoryStackCellView: View {
     
     //MARK: - Private properties
-    private let preview: String
-    private let text: String?
-    private let isViewed: Bool
+    private let viewModel: StoryStackCellViewModel
     private var animation: Namespace.ID
     
     //MARK: - Init
-    init(preview: String, text: String?, isViewed: Bool, animation: Namespace.ID) {
-        self.preview = preview
-        self.text = text
-        self.isViewed = isViewed
+    init(viewModel: StoryStackCellViewModel, animation: Namespace.ID) {
+        self.viewModel = viewModel
         self.animation = animation
     }
     
     //MARK: - Body
     var body: some View {
         VStack {
-            Image(preview)
+            Image(viewModel.preview)
                 .resizable()
                 .scaledToFit()
                 .overlay(
-                    Text(text ?? "")
+                    Text(viewModel.title)
                         .font(.system(size: 12, weight: .regular))
                         .foregroundStyle(.white)
                         .padding(.init(top: 83, leading: 8, bottom: 0, trailing: 0))
                 )
         }
-        .matchedGeometryEffect(id: preview, in: animation)
+       
+        .matchedGeometryEffect(id: viewModel.preview, in: animation)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .frame(height: 140)
-        .opacity(isViewed ? 0.5 : 1)
+        .frame(width: 92, height: 140)
+        .opacity(viewModel.isViewed ? 0.5 : 1)
         .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(.blueUniversal, lineWidth: isViewed ? 0 : 4)
+                    .stroke(.blueUniversal, lineWidth: viewModel.isViewed ? 0 : 4)
                 )
         
         
@@ -52,5 +49,5 @@ struct StoryStackCellView: View {
     @Previewable
     @Namespace var animation
     
-    StoryStackCellView(preview: "Story1Preview", text: "Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text", isViewed: false, animation: animation)
+    StoryStackCellView(viewModel: StoryStackCellViewModel(preview: "Story1Preview", title: "Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text", isViewed: false), animation: animation)
 }
