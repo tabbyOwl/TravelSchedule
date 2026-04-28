@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TabBarView: View {
     var body: some View {
+        NavigationStack {
             TabView {
                 Tab("", systemImage: SystemIcons.arrowUp) {
                     MainSearchView(viewModel: MainSearchViewModel())
@@ -18,6 +19,7 @@ struct TabBarView: View {
                     SettingsView()
                 }
             }
+        }
     }
 }
 

@@ -26,7 +26,7 @@ class MainSearchViewModel {
             }
         }
     }
-
+    
     var toStation: Station {
         get { to }
         set {
@@ -45,8 +45,10 @@ class MainSearchViewModel {
     
     // MARK: - Actions
     func swap() {
-        let temp = from
-        from = to
-        to = temp
+        if from.title != Strings.fromPlaceholder && to.title != Strings.fromPlaceholder {
+            let temp = from
+            from = to
+            to = temp
+        }
     }
 }
