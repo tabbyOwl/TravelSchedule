@@ -14,7 +14,7 @@ struct MainSearchView: View {
     @State private var isStoryPresented: Bool = false
     @State private var selectedGroup: StoryGroup?
     @State private var viewedStories: [Int] = []
- 
+    
     @Namespace private var animation
     
     // MARK: - Init
@@ -24,35 +24,35 @@ struct MainSearchView: View {
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            StoriesHStackView(viewedStories: $viewedStories,
-                              selectedGroup: $selectedGroup,
-                              isPresented: $isStoryPresented,
-                              animation: animation)
-            
-            
-            MainSearchInputView(viewModel: $viewModel)
-            
-            if viewModel.areCitiesSelected {
-                MainSearchSearchButton(fromStation: viewModel.fromStation, toStation: viewModel.toStation)
-            }
-            
-            Spacer()
+        StoriesHStackView(viewedStories: $viewedStories,
+                          selectedGroup: $selectedGroup,
+                          isPresented: $isStoryPresented,
+                          animation: animation)
+        
+        
+        MainSearchInputView(viewModel: $viewModel)
+        
+        if viewModel.areCitiesSelected {
+            MainSearchSearchButton(fromStation: viewModel.fromStation, toStation: viewModel.toStation)
         }
-        .onAppear {
-                viewedStories = getViewedStories()
-        }
-        .onChange(of: isStoryPresented) { _, newValue in
-            if !newValue {
+        
+        Spacer()
+        
+            .onAppear {
                 viewedStories = getViewedStories()
             }
-        }
-        .overlay {
-            if let group = selectedGroup, isStoryPresented {
-                MainStoriesView(stories: group.stories, isPresented: $isStoryPresented)
-                    .matchedGeometryEffect(id: group.previewImage, in: animation)
+            .onChange(of: isStoryPresented) { _, newValue in
+                if !newValue {
+                    viewedStories = getViewedStories()
+                }
             }
-        }
+            .overlay {
+                if let group = selectedGroup, isStoryPresented {
+                    MainStoriesView(stories: group.stories, isPresented: $isStoryPresented)
+                        .matchedGeometryEffect(id: group.previewImage, in: animation)
+                }
+            }
+        
     }
     
     // MARK: - Private methods

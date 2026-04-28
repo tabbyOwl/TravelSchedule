@@ -14,8 +14,6 @@ enum SystemIcons {
 enum Strings {
     static let fromPlaceholder = "Откуда"
     static let toPlaceholder = "Куда"
-    
-    
 }
 
 enum MainSearchLayout {
@@ -36,4 +34,10 @@ enum CarrierInfoStrings {
     static let email = "E-mail"
     static let phone = "Телефон"
     static let title = "Информация о перевозчике"
+}
+
+enum TermsViewStrings {
+    static let url = "https://yandex.ru/legal/timetable_termsofuse/ru/"
+    static let uncorrectUrl = "Некорректный URL"
+    static let title = "Пользовательское соглашение"
 }

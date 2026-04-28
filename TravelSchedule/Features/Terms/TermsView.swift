@@ -8,19 +8,21 @@
 import SwiftUI
 
 struct TermsView: View {
-    private let url = URL(string: "https://yandex.ru/legal/timetable_termsofuse/ru/")
+    private let url = URL(string: TermsViewStrings.url)
     
     var body: some View {
         Group {
             if let url {
                 WebView(url: url)
+                    
             } else {
-                Text("Некорректный URL")
+                Text(TermsViewStrings.uncorrectUrl)
             }
         }
         .ignoresSafeArea()
-        .navigationTitle("Пользовательское соглашение")
+        .navigationTitle(TermsViewStrings.title)
         .toolbarVisibility(.hidden, for: .tabBar)
+        
     }
 }
 
