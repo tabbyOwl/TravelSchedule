@@ -24,28 +24,30 @@ struct MainSearchView: View {
     
     // MARK: - Body
     var body: some View {
-        StoriesHStackView(viewedStories: $viewedStories,
-                          selectedGroup: $selectedGroup,
-                          isPresented: $isStoryPresented,
-                          animation: animation)
-        
-        
-        MainSearchInputView(viewModel: $viewModel)
-        
-        if viewModel.areCitiesSelected {
-            MainSearchSearchButton(fromStation: viewModel.fromStation, toStation: viewModel.toStation)
-        }
-        
-        Spacer()
-        
-            .onAppear {
-                viewedStories = getViewedStories()
+        VStack {
+            StoriesHStackView(viewedStories: $viewedStories,
+                              selectedGroup: $selectedGroup,
+                              isPresented: $isStoryPresented,
+                              animation: animation)
+            
+            
+            MainSearchInputView(viewModel: $viewModel)
+            
+            if viewModel.areCitiesSelected {
+                MainSearchSearchButton(fromStation: viewModel.fromStation, toStation: viewModel.toStation)
             }
-            .onChange(of: isStoryPresented) { _, newValue in
-                if !newValue {
+            
+            Spacer()
+            
+                .onAppear {
                     viewedStories = getViewedStories()
                 }
-            }
+                .onChange(of: isStoryPresented) { _, newValue in
+                    if !newValue {
+                        viewedStories = getViewedStories()
+                    }
+                }
+        }
             .overlay {
                 if let group = selectedGroup, isStoryPresented {
                     MainStoriesView(stories: group.stories, isPresented: $isStoryPresented)

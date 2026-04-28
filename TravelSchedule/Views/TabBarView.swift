@@ -10,11 +10,11 @@ import SwiftUI
 struct TabBarView: View {
     var body: some View {
             TabView {
-                Tab("", systemImage: "arrow.up.message.fill") {
+                Tab("", systemImage: SystemIcons.arrowUp) {
                     MainSearchView(viewModel: MainSearchViewModel())
                 }
                 
-                Tab("", systemImage: "gearshape") {
+                Tab("", systemImage: SystemIcons.gearshape) {
                     SettingsView()
                 }
             }

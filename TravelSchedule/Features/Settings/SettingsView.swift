@@ -19,11 +19,10 @@ struct SettingsView: View {
                
             NavigationLink(destination: TermsView()) {
                 HStack {
-                    Text("Пользовательское соглашение")
+                    Text(TermsViewStrings.title)
                     Spacer()
                     Image(systemName: SystemIcons.chevronRight)
                 }
-               
             }
             .frame(width: 375, height: 60)
             Spacer()
@@ -37,9 +36,7 @@ struct SettingsView: View {
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
         .foregroundStyle(.primary)
-        
     }
-    
 }
 
 #Preview {
