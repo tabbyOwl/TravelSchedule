@@ -1,0 +1,13 @@
+//
+//  Carrier.swift
+//  TravelSchedule
+//
+//  Created by Svetlana on 2026/4/20.
+//
+
+struct Carrier: Codable {
+    let title: String
+    let phone: String
+    let email: String
+    let logo: String
+}

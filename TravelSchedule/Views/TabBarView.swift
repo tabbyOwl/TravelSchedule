@@ -9,17 +9,17 @@ import SwiftUI
 
 struct TabBarView: View {
     var body: some View {
-        TabView {
-            Tab("", systemImage: "arrow.up.message.fill") {
-                MainSearchView(viewModel: MainSearchViewModel())
-            }
-            
-            
-            Tab("", systemImage: "gearshape") {
-                Text("Настройки")
+        NavigationStack {
+            TabView {
+                Tab("", systemImage: SystemIcons.arrowUp) {
+                    MainSearchView(viewModel: MainSearchViewModel())
+                }
+                
+                Tab("", systemImage: SystemIcons.gearshape) {
+                    SettingsView()
+                }
             }
         }
-        
     }
 }
 

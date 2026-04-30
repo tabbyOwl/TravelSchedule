@@ -32,3 +32,4 @@ struct MainSearchSearchButton: View {
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
+

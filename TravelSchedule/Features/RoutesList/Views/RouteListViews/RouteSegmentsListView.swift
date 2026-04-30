@@ -20,7 +20,7 @@ struct RouteSegmentsListView: View {
     var body: some View {
         ScrollView {
             ForEach(segments) { segment in
-                NavigationLink(destination: CarrierInfoView()) {
+                NavigationLink(destination: CarrierInfoView(viewModel: CarrierInfoViewModel(carrier: mockCarrier))) {
                     RouteCardView(segment: segment)
                         .foregroundStyle(.blackUniversal)
                 }

@@ -11,6 +11,11 @@ struct MainSearchView: View {
     
     // MARK: - State
     @State private var viewModel = MainSearchViewModel()
+    @State private var isStoryPresented: Bool = false
+    @State private var selectedGroup: StoryGroup?
+    @State private var viewedStories: [Int] = []
+    
+    @Namespace private var animation
     
     // MARK: - Init
     init(viewModel: MainSearchViewModel) {
@@ -19,23 +24,45 @@ struct MainSearchView: View {
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            content
+        VStack {
+            StoriesHStackView(viewedStories: $viewedStories,
+                              selectedGroup: $selectedGroup,
+                              isPresented: $isStoryPresented,
+                              animation: animation)
+            
+            
+            MainSearchInputView(viewModel: $viewModel)
+            
             if viewModel.areCitiesSelected {
                 MainSearchSearchButton(fromStation: viewModel.fromStation, toStation: viewModel.toStation)
             }
+            
+            Spacer()
+            
+                .onAppear {
+                    viewedStories = getViewedStories()
+                }
+                .onChange(of: isStoryPresented) { _, newValue in
+                    if !newValue {
+                        viewedStories = getViewedStories()
+                    }
+                }
         }
+            .overlay {
+                if let group = selectedGroup, isStoryPresented {
+                    MainStoriesView(stories: group.stories, isPresented: $isStoryPresented)
+                        .matchedGeometryEffect(id: group.previewImage, in: animation)
+                }
+            }
+        
     }
-
-    // MARK: - Content
-    private var content: some View {
-        HStack {
-            MainSearchInputView(fromStation: $viewModel.fromStation, toStation: $viewModel.toStation)
-            MainSearchSwapButton(action: viewModel.swap)
+    
+    // MARK: - Private methods
+    private func getViewedStories() -> [Int] {
+        if let stories = UserDefaults.standard.array(forKey: UserDefaultsKeys.viewedStories) {
+            return stories as? [Int] ?? []
         }
-        .padding()
-        .background(.blueUniversal)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        return []
     }
 }
 

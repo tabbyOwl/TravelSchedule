@@ -6,8 +6,11 @@
 //
 import Foundation
 
+
 enum SystemIcons {
     static let chevronRight = "chevron.right"
+    static let arrowUp = "arrow.up.message.fill"
+    static let gearshape = "gearshape"
 }
 
 enum Strings {
@@ -18,4 +21,25 @@ enum Strings {
 enum MainSearchLayout {
     static let inputWidth: CGFloat = 259
     static let searchButtonWidth: CGFloat = 150
+}
+
+enum UserDefaultsKeys {
+    static let viewedStories = "viewedStories"
+}
+
+enum CarrierInfoLayout {
+    static let imageWidth: CGFloat = 393
+    static let imageHeight: CGFloat = 104
+}
+
+enum CarrierInfoStrings {
+    static let email = "E-mail"
+    static let phone = "Телефон"
+    static let title = "Информация о перевозчике"
+}
+
+enum TermsViewStrings {
+    static let url = "https://yandex.ru/legal/timetable_termsofuse/ru/"
+    static let uncorrectUrl = "Некорректный URL"
+    static let title = "Пользовательское соглашение"
 }

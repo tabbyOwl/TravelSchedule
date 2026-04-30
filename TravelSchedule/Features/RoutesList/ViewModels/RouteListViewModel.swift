@@ -13,7 +13,7 @@ class RouteListViewModel {
     private let from: Station
     private let to: Station
     private var segments: [Segment] = mockSegments
-    private var _selectedIntervals: Set<TimeInterval> = []
+    private var _selectedIntervals: Set<ScheduleInterval> = []
     private var _showTransfers = true
  
     // MARK: - Computed Properties
@@ -47,7 +47,7 @@ class RouteListViewModel {
         }
     }
     
-    var selectedIntervals: Set<TimeInterval>  {
+    var selectedIntervals: Set<ScheduleInterval>  {
         get { _selectedIntervals }
         set {
             if newValue != _selectedIntervals {
