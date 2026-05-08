@@ -5,8 +5,11 @@
 //  Created by Svetlana on 2026/4/16.
 //
 import SwiftUI
+import SwiftData
 
 struct InputRowView: View {
+    
+    @Environment(\.modelContext) private var modelContext
     // MARK: - Bindings
     @Binding var station: Station
     
@@ -20,7 +23,8 @@ struct InputRowView: View {
         let title = station.title
         let isSelected = title != Strings.fromPlaceholder && title != Strings.toPlaceholder
         
-        NavigationLink(destination: CitySearchView(station: $station, viewModel: CitySearchViewModel())) {
+        NavigationLink(destination: CitySearchView(station: $station,
+                                                   viewModel: CitySearchViewModel(serviceFactory: DefaultServiceFactory(), modelContext: modelContext))) {
             rowView(title: title, isSelected: isSelected)
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CitySearchView: View {
     
@@ -22,36 +23,49 @@ struct CitySearchView: View {
     // MARK: - Init
     init(station: Binding<Station>, viewModel: CitySearchViewModel) {
         _station = station
-        self.viewModel = viewModel
+        _viewModel = State(initialValue: viewModel)
     }
     
     // MARK: - Body
     var body: some View {
-        content
-            .searchable(text: $viewModel.searchText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Введите запрос")
-
-            .onAppear {
-                if isDismissing {
-                    dismiss()
-                }
-                viewModel.loadCities()
+        
+        Group {
+            if let errorMode = viewModel.errorMode {
+                ErrorView(mode: errorMode)
+            } else if viewModel.shouldShowSearchLoading {
+                ProgressView()
             }
-            .toolbarVisibility(.hidden, for: .tabBar)
-    }
+            else if viewModel.hasNoResults {
+                NoDataView(text: "Город не найден")
+            } else {
+                CitySearchListView(station: $station,
+                                   isDismissing: $isDismissing,
+                                   cities: viewModel.filteredCities)
+            }
+        }
+                
+                .searchable(
+                    text: $viewModel.searchText,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: "Введите запрос"
+                )
+        .toolbarVisibility(.hidden, for: .tabBar)
     
-    // MARK: - Content
-    @ViewBuilder
-    private var content: some View {
-        if viewModel.hasNoResults {
-            NoDataView(text: "Город не найден")
-        } else {
-            CitySearchListView(station: $station, isDismissing: $isDismissing, cities: viewModel.filteredCities)
+        .task {
+            await viewModel.loadCities()
+        }
+        .onChange(of: isDismissing) { _, newValue in
+            if newValue {
+                dismiss()
+            }
         }
     }
 }
 
 #Preview {
-    CitySearchView(station: .constant(Station(title: "", code: "", type: "")), viewModel: CitySearchViewModel())
+    @Previewable
+    @Environment(\.modelContext) var modelContext
+    
+    CitySearchView(station: .constant(mockStation),
+                   viewModel: CitySearchViewModel(serviceFactory: DefaultServiceFactory(), modelContext: modelContext))
 }

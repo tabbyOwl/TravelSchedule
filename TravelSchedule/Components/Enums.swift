@@ -43,3 +43,8 @@ enum TermsViewStrings {
     static let uncorrectUrl = "Некорректный URL"
     static let title = "Пользовательское соглашение"
 }
+
+nonisolated
+enum DisplayedData {
+    static let citiesList = ["Москва", "Санкт-Петербург", "Сочи", "Краснодар", "Казань"]
+}

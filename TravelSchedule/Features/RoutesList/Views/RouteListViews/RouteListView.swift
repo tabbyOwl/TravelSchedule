@@ -62,5 +62,5 @@ private extension RouteListView {
 }
 
 #Preview {
-    RouteListView(viewModel: RouteListViewModel(from: Station(title: "Москва", code: "", type: ""), to: Station(title: "Сочи", code: "", type: "")))
+    RouteListView(viewModel: RouteListViewModel(from: mockStation, to: mockStation))
 }

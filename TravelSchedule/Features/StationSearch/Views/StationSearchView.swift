@@ -54,7 +54,7 @@ struct StationSearchView: View {
 
 #Preview {
     NavigationStack {
-        StationSearchView(station: .constant(Station(title: "", code: "", type: "")), isDismissing: .constant(false), viewModel: StationSearchViewModel(city: Settlement(title: "", stations: mockCitiesList[0].stations)))
+        StationSearchView(station: .constant(mockStation), isDismissing: .constant(false), viewModel: StationSearchViewModel(city: mockCity))
     }
 }
 

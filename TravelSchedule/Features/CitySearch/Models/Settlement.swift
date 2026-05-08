@@ -6,8 +6,8 @@
 //
 import Foundation
 
-struct Settlement: Identifiable {
-    let id = UUID()
+struct Settlement: Identifiable, Codable {
+    let id: String
     let title: String
     let stations: [Station]
 }

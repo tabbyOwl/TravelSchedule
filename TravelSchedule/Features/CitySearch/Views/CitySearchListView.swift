@@ -5,6 +5,7 @@
 //  Created by Svetlana on 2026/4/18.
 //
 
+import SwiftData
 import SwiftUI
 
 struct CitySearchListView: View {
@@ -42,6 +43,8 @@ struct CitySearchListView: View {
     }
 }
 
-#Preview {
-    CitySearchView(station: .constant(Station(title: "", code: "", type: "")), viewModel: CitySearchViewModel())
-}
+//#Preview {
+//    
+//    CitySearchView(station: .constant(Station(id: UUID(), title: "", code: "")),
+//                   viewModel: CitySearchViewModel(serviceFactory: DefaultServiceFactory(), modelContext: ModelContext(ModelContainer())))
+//}

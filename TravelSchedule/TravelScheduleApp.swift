@@ -6,19 +6,28 @@
 //
 
 import SwiftUI
-import CoreData
+import KeychainSwift
+import SwiftData
 
 @main
 struct TravelScheduleApp: App {
     @AppStorage("isDarkMode") private var isDarkMode = false
-    
     let persistenceController = PersistenceController.shared
-
+    let apiKeyManager = APIKeyManager()
+    
+    init() {
+        apiKeyManager.saveApiKey("39ebe8a8-df24-4caa-8c92-824abae7196d")
+    }
+    
     var body: some Scene {
         WindowGroup {
             TabBarView()
                 .preferredColorScheme(isDarkMode ? .dark : .light)
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                //.environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
+        .modelContainer(for: [
+            SettlementEntity.self,
+            StationEntity.self
+        ])
     }
 }
