@@ -26,6 +26,7 @@ struct CitySearchView: View {
         _viewModel = State(initialValue: viewModel)
     }
     
+    
     // MARK: - Body
     var body: some View {
         
@@ -62,10 +63,19 @@ struct CitySearchView: View {
     }
 }
 
-#Preview {
-    @Previewable
-    @Environment(\.modelContext) var modelContext
-    
-    CitySearchView(station: .constant(mockStation),
-                   viewModel: CitySearchViewModel(serviceFactory: DefaultServiceFactory(), modelContext: modelContext))
-}
+//#Preview {
+//
+//    CitySearchView(
+//        station: .constant(mockStation),
+//        viewModel: .mock
+//    )
+//}
+//
+//extension CitySearchViewModel {
+//
+//    static let mock = CitySearchViewModel(
+//        repository: MockRepository(),
+//        stationsListService: MockStationsListService(),
+//        nearestStationsService: MockNearestStationsService()
+//    )
+//}

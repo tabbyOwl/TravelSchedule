@@ -10,8 +10,8 @@ import SwiftUI
 class MainSearchViewModel {
     
     // MARK: - Private Properties
-    private var from: Station = Station(id: UUID(), title: Strings.fromPlaceholder, code: "")
-    private var to: Station = Station(id: UUID(), title: Strings.toPlaceholder, code: "")
+    private var from: Station = Station(id: "8", title: Strings.fromPlaceholder, code: "")
+    private var to: Station = Station(id: "8", title: Strings.toPlaceholder, code: "")
     
     // MARK: - Computed Properties
     func isSelected(title: String) -> Bool {

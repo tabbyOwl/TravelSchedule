@@ -9,13 +9,14 @@ import SwiftData
 
 struct InputRowView: View {
     
-    @Environment(\.modelContext) private var modelContext
     // MARK: - Bindings
     @Binding var station: Station
     
+    let citySearchViewModel: CitySearchViewModel
     // MARK: - Init
-    init(station: Binding<Station>) {
+    init(station: Binding<Station>, citySearchViewModel: CitySearchViewModel) {
         _station = station
+        self.citySearchViewModel = citySearchViewModel
     }
     
     // MARK: - Body
@@ -24,7 +25,7 @@ struct InputRowView: View {
         let isSelected = title != Strings.fromPlaceholder && title != Strings.toPlaceholder
         
         NavigationLink(destination: CitySearchView(station: $station,
-                                                   viewModel: CitySearchViewModel(serviceFactory: DefaultServiceFactory(), modelContext: modelContext))) {
+                                                   viewModel: citySearchViewModel)) {
             rowView(title: title, isSelected: isSelected)
         }
     }

@@ -14,23 +14,38 @@ enum APIKeyError: Error {
 }
 
 protocol ServiceFactoryProtocol {
-    func makeService<T: APIService>(_ type: T.Type) throws -> T
+    
+    var stationsListService: StationsListServiceProtocol { get }
+    
+    var nearestStationsService: NearestStationsServiceProtocol { get }
 }
 
-class DefaultServiceFactory: ServiceFactoryProtocol {
-    /// Функция для создания сервисов с использованием API ключа
-    func makeService<T: APIService>(_ type: T.Type) throws -> T {
+final class DefaultServiceFactory: ServiceFactoryProtocol {
+
+    let stationsListService: StationsListServiceProtocol
+    let nearestStationsService: NearestStationsServiceProtocol
+
+    init() {
+
         let apiKeyManager = APIKeyManager()
-        
+
         guard let apiKey = apiKeyManager.getApiKey() else {
-            throw APIKeyError.keyNotFound
+            fatalError("API key not found")
         }
-        
+
         let client = try! Client(
             serverURL: Servers.Server1.url(),
             transport: URLSessionTransport()
         )
-        
-        return T(client: client, apikey: apiKey)
+
+        self.stationsListService = StationsListService(
+            client: client,
+            apikey: apiKey
+        )
+
+        self.nearestStationsService = NearestStationsService(
+            client: client,
+            apikey: apiKey
+        )
     }
 }

@@ -14,12 +14,12 @@ let baseStations = [
     "Ленинградский вокзал"
 ]
 
-let mockStation = Station(id: UUID(), title: "Казанский вокзал", code: "8")
+let mockStation = Station(id: "9", title: "Казанский вокзал", code: "8")
 
 // MARK: - Cities
 func createCity(_ city: String) -> Settlement {
     let stations = baseStations.map {
-        Station(id: UUID(), title: "\(city) (\($0))", code: "")
+        Station(id: "9", title: "\(city) (\($0))", code: "")
     }
     return Settlement(id: "6", title: city, stations: stations)
 }

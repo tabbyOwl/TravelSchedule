@@ -38,7 +38,7 @@ actor CitiesRepository {
                 title: $0.title,
                 stations: $0.stations.map {
                     Station(
-                        id: UUID(),
+                        id: $0.code,
                         title: $0.title,
                         code: $0.code
                     )
@@ -60,7 +60,7 @@ actor CitiesRepository {
                 title: $0.title,
                 stations: $0.stations.map {
                     Station(
-                        id: UUID(),
+                        id: $0.code,
                         title: $0.title,
                         code: $0.code
                     )
@@ -79,23 +79,45 @@ actor CitiesRepository {
         logger.info("Saving to swiftData...")
 
         for settlement in settlements {
-            guard let id = settlement.codes?.yandex_code else { continue}
 
-            let descriptor = FetchDescriptor<SettlementEntity>(
-                predicate: #Predicate { $0.id == id })
-
-            let existing = try modelContext.fetch(descriptor).first
-
-            if existing != nil {
-                continue
-            }
-
-            guard let entity = SettlementEntity(from: settlement)
+            guard let id = settlement.codes?.yandex_code,
+                  let title = settlement.title
             else {
                 continue
             }
 
-            modelContext.insert(entity)
+            let descriptor = FetchDescriptor<SettlementEntity>(
+                predicate: #Predicate { $0.id == id }
+            )
+
+            let entity: SettlementEntity
+
+            if let existing = try modelContext.fetch(descriptor).first {
+
+                entity = existing
+                entity.title = title
+                entity.stations.removeAll()
+
+            } else {
+
+                entity = SettlementEntity(
+                    id: id,
+                    title: title,
+                    stations: []
+                )
+
+                modelContext.insert(entity)
+            }
+
+            let stationsDTO = settlement.stations ?? []
+            
+            for dto in stationsDTO {
+                guard let station = StationEntity(from: dto) else {
+                    continue
+                }
+
+                entity.stations.append(station)
+            }
         }
 
         try modelContext.save()

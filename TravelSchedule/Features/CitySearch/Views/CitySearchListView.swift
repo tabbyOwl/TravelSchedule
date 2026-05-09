@@ -27,7 +27,7 @@ struct CitySearchListView: View {
     // MARK: - Body
     var body: some View {
         List(cities) { city in
-            NavigationLink { StationSearchView(station: $station, isDismissing: $isDismissing, viewModel: StationSearchViewModel(city: city)) } label: {
+            NavigationLink { StationSearchView(station: $station, isDismissing: $isDismissing, viewModel: StationSearchViewModel(stations: city.stations)) } label: {
                 HStack {
                     Text(city.title)
                     Spacer()

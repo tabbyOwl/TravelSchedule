@@ -15,21 +15,23 @@ import OpenAPIRuntime
 class CitySearchViewModel {
     
     var errorMode: ErrorMode?
+    var searchText: String = ""
     // MARK: - Private Properties
     private let logger = Logger(label: "CitySearchViewModel")
     private let repository: CitiesRepository
-    private let serviceFactory: ServiceFactoryProtocol
     private let stationsListService: StationsListServiceProtocol
     private let nearestStationsService: NearestStationsServiceProtocol
     
     private var isLoading: Bool = false
     private var cities: [Settlement] = []
-    private var _searchText: String = ""
+    
     
     private var loadedDisplayedCities: [Settlement] = []
     
-    private let placeholderCities = DisplayedData.citiesList.map {
-        Settlement(id: $0,title: $0,stations: [])
+    private var placeholderCities: [Settlement] {
+        DisplayedData.citiesList.map {
+            Settlement(id: $0, title: $0, stations: [])
+        }
     }
     
     var displayedCities: [Settlement] {
@@ -37,17 +39,13 @@ class CitySearchViewModel {
     }
     
     // MARK: - Computed Properties
-    var searchText: String {
-        get { _searchText }
-        set { _searchText = newValue }
-    }
-    
+   
     var shouldShowSearchLoading: Bool {
         isLoading && !searchText.isEmpty
     }
     
     var hasNoResults: Bool {
-        !_searchText.isEmpty && filteredCities.isEmpty && !isLoading
+        !searchText.isEmpty && filteredCities.isEmpty && !isLoading
     }
     
     /// Фильтрует города по поисковому запросу и сортирует их по релевантности:
@@ -55,9 +53,9 @@ class CitySearchViewModel {
     /// - Затем города, содержащие запрос в любом месте
     /// - Внутри групп сортировка по алфавиту
     var filteredCities: [Settlement] {
-        guard !_searchText.isEmpty else { return displayedCities }
+        guard !searchText.isEmpty else { return displayedCities }
         
-        let lowercasedQuery = _searchText.lowercased()
+        let lowercasedQuery = searchText.lowercased()
         
         return cities
             .filter {
@@ -70,31 +68,27 @@ class CitySearchViewModel {
                 if lhsStarts != rhsStarts {
                     return lhsStarts
                 }
-                
                 return lhs.title < rhs.title
             }
     }
     
     // MARK: - Init
-    init(serviceFactory: ServiceFactoryProtocol, modelContext: ModelContext) {
-        self.serviceFactory = serviceFactory
-        self.repository = CitiesRepository(modelContainer: modelContext.container)
-        do {
-            self.stationsListService = try serviceFactory.makeService(StationsListService.self)
-            self.nearestStationsService = try serviceFactory.makeService(NearestStationsService.self)
-        } catch {
-            fatalError("Ошибка при создании сервиса: \(error)")
-        }
+    init(
+        repository: CitiesRepository,
+        stationsListService: StationsListServiceProtocol,
+        nearestStationsService: NearestStationsServiceProtocol
+    ) {
+
+        self.repository = repository
+        self.stationsListService = stationsListService
+        self.nearestStationsService = nearestStationsService
     }
     
     // MARK: - Public methods
     func loadCities() async {
         
         do {
-            let data = try await repository.loadCities()
-            
-            self.loadedDisplayedCities = data.displayedCities
-            self.cities = data.cities
+            try await updateCitiesFromDatabase()
             
             if !cities.isEmpty {
                 logger.info("Loaded from database")
@@ -106,7 +100,9 @@ class CitySearchViewModel {
         await fetchAllStations()
     }
     
-    
+    func loadCitiesFromDataBase() async {
+        
+    }
     
     func fetchAllStations() async {
         isLoading = true
@@ -117,26 +113,22 @@ class CitySearchViewModel {
         }
         
         do {
-            let allStations = try await stationsListService.getAllStations()
             logger.info("Fetching stations...")
-            
+            let allStations = try await stationsListService.getAllStations()
+           
             let allSettlements = allStations.countries?
                 .flatMap { $0.regions ?? [] }
                 .flatMap { $0.settlements ?? [] }
             
             guard let allSettlements else { return }
             
-            let settlementsWithTrainStations = allSettlements.filter({ settlement in
-                guard let stations = settlement.stations else { return false }
-                return stations.contains(where: { ($0.station_type == "train_station" || $0.station_type == "station") && $0.transport_type == "train" })
-            })
+            let filteredSettlements: [Components.Schemas.Settlement] = filterSettlements(allSettlements)
             
             logger.info("Successfully fetched stations list.")
-            try await repository.saveSettlements(settlementsWithTrainStations)
             
-            let data = try await repository.loadCities()
-            self.loadedDisplayedCities = data.displayedCities
-            self.cities = data.cities
+            try await repository.saveSettlements(filteredSettlements)
+           
+            try await updateCitiesFromDatabase()
             
             isLoading = false
         } catch is CancellationError {}
@@ -159,6 +151,37 @@ class CitySearchViewModel {
             }
             errorMode = .serverError
         }
+    }
+    
+    //MARK: - Private methods
+    private func filterSettlements(_ settlements: [Components.Schemas.Settlement]) -> [Components.Schemas.Settlement] {
+        settlements.compactMap { settlement in
+            
+            let filteredStations = settlement.stations?.filter(isValidTrainStation) ?? []
+
+            guard !filteredStations.isEmpty else {
+                return nil
+            }
+
+            var newSettlement = settlement
+            newSettlement.stations = filteredStations
+
+            return newSettlement
+        }
+    }
+    
+    private func isValidTrainStation(_ station: Components.Schemas.Station) -> Bool {
+        let validTypes = ["train_station", "station"]
+
+        return validTypes.contains(station.station_type ?? "")
+            && !(station.direction?.isEmpty ?? true)
+    }
+    
+    private func updateCitiesFromDatabase() async throws {
+        let data = try await repository.loadCities()
+        
+        self.loadedDisplayedCities = data.displayedCities
+        self.cities = data.cities
     }
     
 }

@@ -13,7 +13,9 @@ final class SettlementEntity {
     @Attribute(.unique)
     var id: String
     var title: String
-    var stations: [StationEntity]
+    
+    @Relationship(deleteRule: .cascade)
+    var stations: [StationEntity] = []
 
     init(id: String, title: String, stations: [StationEntity]) {
         self.id = id
@@ -29,16 +31,14 @@ extension SettlementEntity {
         guard let id = dto.codes?.yandex_code,
               let title = dto.title,
               let stationsDTO = dto.stations
-        else { return nil }
-
+        else {
+            return nil
+        }
+        
         let stations = stationsDTO.compactMap {
             StationEntity(from: $0)
         }
-
-        self.init(
-            id: id,
-            title: title,
-            stations: stations
-        )
+        self.init(id: id, title: title, stations: stations)
+      
     }
 }

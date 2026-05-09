@@ -16,8 +16,6 @@ struct StationSearchView: View {
     // MARK: - State
     @State private var viewModel: StationSearchViewModel
     
-   
-    
     // MARK: - Init
     init(station: Binding<Station>, isDismissing: Binding<Bool>, viewModel: StationSearchViewModel) {
         _station = station
@@ -36,9 +34,6 @@ struct StationSearchView: View {
     // MARK: - Content
     @ViewBuilder
     var content: some View {
-        if viewModel.isLoading {
-            ProgressView()
-        } else {
             if viewModel.hasNoResults {
                 NoDataView(text: "Станция не найдена")
             } else {
@@ -49,12 +44,11 @@ struct StationSearchView: View {
             }
         }
     }
-}
 
 
 #Preview {
     NavigationStack {
-        StationSearchView(station: .constant(mockStation), isDismissing: .constant(false), viewModel: StationSearchViewModel(city: mockCity))
+        StationSearchView(station: .constant(mockStation), isDismissing: .constant(false), viewModel: StationSearchViewModel(stations: [mockStation]))
     }
 }
 
