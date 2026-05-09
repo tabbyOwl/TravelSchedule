@@ -9,20 +9,22 @@ import Foundation
 @Observable
 class RouteListViewModel {
     
+    var segments: [Segment] = mockSegments
+    var selectedIntervals: Set<ScheduleInterval> = []
+    var showTransfers = true
+    
     // MARK: - Private Properties
     private let from: Station
     private let to: Station
-    private var segments: [Segment] = mockSegments
-    private var _selectedIntervals: Set<ScheduleInterval> = []
-    private var _showTransfers = true
- 
+    private let scheduleService: ScheduleBetweenStationsProtocol
+    
     // MARK: - Computed Properties
     var filteredSegments: [Segment] {
-        _selectedIntervals.isEmpty ? segments :
+        selectedIntervals.isEmpty ? segments :
         segments.filter { segment in
             guard let time = getMinutes(from: segment.departure) else { return false }
             
-            return _selectedIntervals.contains { interval in
+            return selectedIntervals.contains { interval in
                 if let startTime = getMinutes(from: interval.startTime),
                    let endTime = getMinutes(from: interval.endTime) {
                     
@@ -38,26 +40,8 @@ class RouteListViewModel {
         .sorted { $0.date < $1.date }
     }
     
-    var showTransfers: Bool {
-        get {_showTransfers }
-        set {
-            if newValue != _showTransfers {
-                _showTransfers = newValue
-            }
-        }
-    }
-    
-    var selectedIntervals: Set<ScheduleInterval>  {
-        get { _selectedIntervals }
-        set {
-            if newValue != _selectedIntervals {
-                _selectedIntervals = newValue
-            }
-        }
-    }
-    
     var isFiltersOn: Bool {
-        _selectedIntervals.isEmpty ? false : true
+        selectedIntervals.isEmpty ? false : true
     }
     
     var routeTitle: String {
@@ -65,9 +49,10 @@ class RouteListViewModel {
     }
     
     // MARK: - Init
-    init(from: Station, to: Station) {
+    init(from: Station, to: Station, scheduleService: ScheduleBetweenStationsProtocol) {
         self.from = from
         self.to = to
+        self.scheduleService = scheduleService
     }
     
     // MARK: - Private Methods
@@ -79,4 +64,19 @@ class RouteListViewModel {
         
         return hours * 60 + minutes
     }
+    
+//    func loadSchedule() async {
+//        _isLoading = true
+//        do {
+//            let schedule = try await scheduleService.getScheduleBetweenStations(from: from.code, to: to.code)
+//            logger.info("Fetching schedule...")
+//            guard let fetched = schedule.segments else { return }
+//            self.segments = fetched.compactMap(Segment.init)
+//            saveSegmentsToCache(segments)
+//            logger.info(" Successfully fetched schedule...")
+//        } catch {
+//            logger.error("Error fetching schedule: \(error.localizedDescription)")
+//        }
+//        _isLoading = false
+//    }
 }

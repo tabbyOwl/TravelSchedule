@@ -9,14 +9,14 @@ import SwiftUI
 
 struct MainSearchInputView: View {
     
-    @Environment(\.modelContext) private var modelContext
-    @State private var citySearchViewModel: CitySearchViewModel?
+    private var citySearchViewModel: CitySearchViewModel
     // MARK: - Bindings
     @Binding private var viewModel: MainSearchViewModel
     
     // MARK: - Init
-    init(viewModel: Binding<MainSearchViewModel>) {
+    init(viewModel: Binding<MainSearchViewModel>, citySearchViewModel: CitySearchViewModel) {
         _viewModel = viewModel
+        self.citySearchViewModel = citySearchViewModel
     }
     
     // MARK: - Body
@@ -31,38 +31,19 @@ struct MainSearchInputView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding()
         
-        .task {
-            guard citySearchViewModel == nil else {
-                return
-            }
-            
-            let factory = DefaultServiceFactory()
-            
-            let repository = CitiesRepository(
-                modelContainer: modelContext.container
-            )
-            
-            citySearchViewModel = CitySearchViewModel(
-                repository: repository,
-                stationsListService: factory.stationsListService,
-                nearestStationsService: factory.nearestStationsService
-            )
-        }
     }
     
     
     private var inputRows: some View {
         VStack {
-            if let citySearchViewModel {
                 InputRowView(station: $viewModel.fromStation, citySearchViewModel: citySearchViewModel)
                 InputRowView(station: $viewModel.toStation, citySearchViewModel: citySearchViewModel)
-            }
         }
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
-#Preview {
-    MainSearchInputView(viewModel: .constant(MainSearchViewModel()))
-}
+//#Preview {
+//    MainSearchInputView(viewModel: .constant(MainSearchViewModel()))
+//}

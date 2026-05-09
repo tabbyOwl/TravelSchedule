@@ -61,6 +61,6 @@ private extension RouteListView {
     }
 }
 
-#Preview {
-    RouteListView(viewModel: RouteListViewModel(from: mockStation, to: mockStation))
-}
+//#Preview {
+//    RouteListView(viewModel: RouteListViewModel(from: mockStation, to: mockStation))
+//}

@@ -14,38 +14,26 @@ enum APIKeyError: Error {
 }
 
 protocol ServiceFactoryProtocol {
-    
-    var stationsListService: StationsListServiceProtocol { get }
-    
-    var nearestStationsService: NearestStationsServiceProtocol { get }
+    func makeScheduleService() -> ScheduleBetweenStationsProtocol
+    func makeStationsService() -> StationsListServiceProtocol
 }
 
-final class DefaultServiceFactory: ServiceFactoryProtocol {
 
-    let stationsListService: StationsListServiceProtocol
-    let nearestStationsService: NearestStationsServiceProtocol
-
-    init() {
-
-        let apiKeyManager = APIKeyManager()
-
-        guard let apiKey = apiKeyManager.getApiKey() else {
-            fatalError("API key not found")
-        }
-
-        let client = try! Client(
-            serverURL: Servers.Server1.url(),
-            transport: URLSessionTransport()
-        )
-
-        self.stationsListService = StationsListService(
-            client: client,
-            apikey: apiKey
-        )
-
-        self.nearestStationsService = NearestStationsService(
-            client: client,
-            apikey: apiKey
-        )
+final class ServiceFactory: ServiceFactoryProtocol {
+    
+    private let client: Client
+    private let apiKey: String
+    
+    init(client: Client, apiKey: String) {
+        self.client = client
+        self.apiKey = apiKey
+    }
+    
+    func makeScheduleService() -> ScheduleBetweenStationsProtocol {
+        ScheduleBetweenStationsService(client: client, apikey: apiKey)
+    }
+    
+    func makeStationsService() -> StationsListServiceProtocol {
+        StationsListService(client: client, apikey: apiKey)
     }
 }

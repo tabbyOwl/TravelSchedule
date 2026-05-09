@@ -20,7 +20,6 @@ class CitySearchViewModel {
     private let logger = Logger(label: "CitySearchViewModel")
     private let repository: CitiesRepository
     private let stationsListService: StationsListServiceProtocol
-    private let nearestStationsService: NearestStationsServiceProtocol
     
     private var isLoading: Bool = false
     private var cities: [Settlement] = []
@@ -75,13 +74,11 @@ class CitySearchViewModel {
     // MARK: - Init
     init(
         repository: CitiesRepository,
-        stationsListService: StationsListServiceProtocol,
-        nearestStationsService: NearestStationsServiceProtocol
+        stationsListService: StationsListServiceProtocol
     ) {
 
         self.repository = repository
         self.stationsListService = stationsListService
-        self.nearestStationsService = nearestStationsService
     }
     
     // MARK: - Public methods
