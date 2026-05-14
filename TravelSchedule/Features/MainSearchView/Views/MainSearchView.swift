@@ -45,7 +45,7 @@ struct MainSearchView: View {
             
             if viewModel.areCitiesSelected {
                 NavigationLink {
-                    RouteListView(viewModel: makeRouteListViewModel())
+                    RouteListView(viewModel: makeRouteListViewModel(), factory: factory)
                 } label: {
                     MainSearchSearchButton()
                 }
@@ -71,21 +71,20 @@ struct MainSearchView: View {
     }
     
     private func makeRouteListViewModel() -> RouteListViewModel {
-
-            let scheduleService = factory.makeScheduleService()
-
+            let service = factory.makeScheduleService()
+            let repository = RouteRepository(modelContainer: modelContext.container)
             return RouteListViewModel(
                 from: viewModel.fromStation,
                 to: viewModel.toStation,
-                scheduleService: scheduleService
+                scheduleService: service,
+                repository: repository
             )
 
     }
     
     private func makeCitySearchViewModel() -> CitySearchViewModel {
-
             let service = factory.makeStationsService()
-        let repository = CitiesRepository(modelContainer: modelContext.container)
+            let repository = CitiesWithStationsRepository(modelContainer: modelContext.container)
             return CitySearchViewModel(repository: repository, stationsListService: service)
 
     }

@@ -5,19 +5,28 @@
 //  Created by Svetlana on 2026/4/16.
 //
 import Foundation
+import Logging
 
+@MainActor
 @Observable
 class RouteListViewModel {
     
-    var segments: [Segment] = mockSegments
+    var segments: [Segment] = []
     var selectedIntervals: Set<ScheduleInterval> = []
     var showTransfers = true
+    var imageLoader = ImageDownloader()
     
     // MARK: - Private Properties
+    private let logger = Logger(label: "RouteListViewModel")
+    private(set) var isLoading = false
     private let from: Station
     private let to: Station
     private let scheduleService: ScheduleBetweenStationsProtocol
+    private let repository: RouteRepository
     
+    private var routeId: String {
+        "\(from.code)-\(to.code)"
+    }
     // MARK: - Computed Properties
     var filteredSegments: [Segment] {
         selectedIntervals.isEmpty ? segments :
@@ -49,13 +58,32 @@ class RouteListViewModel {
     }
     
     // MARK: - Init
-    init(from: Station, to: Station, scheduleService: ScheduleBetweenStationsProtocol) {
+    init(from: Station, to: Station, scheduleService: ScheduleBetweenStationsProtocol, repository: RouteRepository) {
         self.from = from
         self.to = to
         self.scheduleService = scheduleService
+        self.repository = repository
+    }
+    
+    // MARK: - Public Methods
+    
+    func loadSchedule() async {
+        
+        do {
+            try await updateSegmentsFromDatabase()
+            
+            if !segments.isEmpty {
+                logger.info("Loaded from database")
+                return
+            }
+        } catch {
+            logger.error("Data base error: \(error)")
+        }
+        await fetchSchedule()
     }
     
     // MARK: - Private Methods
+    ///число минут от начала суток
     private func getMinutes(from time: String) -> Int? {
         let components = time.split(separator: ":")
         guard
@@ -65,18 +93,40 @@ class RouteListViewModel {
         return hours * 60 + minutes
     }
     
-//    func loadSchedule() async {
-//        _isLoading = true
-//        do {
-//            let schedule = try await scheduleService.getScheduleBetweenStations(from: from.code, to: to.code)
-//            logger.info("Fetching schedule...")
-//            guard let fetched = schedule.segments else { return }
-//            self.segments = fetched.compactMap(Segment.init)
-//            saveSegmentsToCache(segments)
-//            logger.info(" Successfully fetched schedule...")
-//        } catch {
-//            logger.error("Error fetching schedule: \(error.localizedDescription)")
-//        }
-//        _isLoading = false
-//    }
+    private func formattedDuration(_ duration: Int) -> String {
+        let totalHours = duration / 3600
+        
+        let days = totalHours / 24
+        let hours = totalHours % 24
+        
+        if days > 0 {
+            return "\(days) д \(hours) ч"
+        } else {
+            return "\(hours) часов"
+        }
+    }
+    
+    private func fetchSchedule() async {
+        isLoading = true
+        do {
+            logger.info("Fetching schedule...")
+            let schedule = try await scheduleService.getScheduleBetweenStations(from: from.code, to: to.code)
+            
+            guard let fetchedSegments = schedule.segments else { return }
+            
+            try await repository.saveSchedule(for: routeId, segments: fetchedSegments)
+            
+            try await updateSegmentsFromDatabase()
+            
+            logger.info(" Successfully fetched schedule...")
+        } catch {
+            logger.error("Error fetching schedule: \(error.localizedDescription)")
+        }
+        isLoading = false
+    }
+    
+    private func updateSegmentsFromDatabase() async throws {
+        let data = try await repository.loadSchedule(for: routeId)
+        self.segments = data
+    }
 }

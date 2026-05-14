@@ -15,6 +15,8 @@ struct TravelScheduleApp: App {
 
     @AppStorage("isDarkMode") private var isDarkMode = false
 
+    private let imageDownloader = ImageDownloader()
+    
     private let factory: ServiceFactory
 
     init() {
@@ -31,10 +33,14 @@ struct TravelScheduleApp: App {
             let viewModel = MainSearchViewModel()
             TabBarView(factory: factory, viewModel: viewModel)
                 .preferredColorScheme(isDarkMode ? .dark : .light)
+                .environment(\.imageDownloader, imageDownloader)
         }
         .modelContainer(for: [
             SettlementEntity.self,
-            StationEntity.self
+            StationEntity.self,
+            SegmentEntity.self,
+            RouteEntity.self,
+            CarrierEntity.self
         ])
     }
 }

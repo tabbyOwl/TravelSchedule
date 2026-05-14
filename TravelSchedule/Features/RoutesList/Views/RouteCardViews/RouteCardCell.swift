@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct RouteCardView: View {
+struct RouteCardCell: View {
     
     // MARK: - Private Properties
     private let segment: Segment
@@ -21,10 +21,11 @@ struct RouteCardView: View {
         VStack {
             RouteCardTopView(carrierName: segment.carrierName,
                              hasTransfers: segment.hasTransfers,
-                             date: segment.date)
+                             date: segment.date,
+                             logo: segment.logo)
             
             RouteCardBottomView(departure: segment.departure,
-                                duration: segment.duration,
+                                duration: segment.formattedDuration,
                                 arrival: segment.arrival)
         }
         .padding()
@@ -37,6 +38,7 @@ struct RouteCardView: View {
 
 #Preview {
     NavigationLink(destination: EmptyView()) {
-        RouteCardView(segment: Segment(carrierName: "Российские Железные Дороги", carrierCode: 45, logo: "", hasTransfers: true, departure: "13:05", arrival: "12:45", duration: "9 часов", date: "12 апреля"))
-    }.foregroundStyle(.blackUniversal)
+        RouteCardCell(segment: mockSegments[0])
+    }
+    .foregroundStyle(.blackUniversal)
 }

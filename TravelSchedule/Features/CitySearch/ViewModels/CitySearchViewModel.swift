@@ -18,10 +18,10 @@ class CitySearchViewModel {
     var searchText: String = ""
     // MARK: - Private Properties
     private let logger = Logger(label: "CitySearchViewModel")
-    private let repository: CitiesRepository
+    private let repository: CitiesWithStationsRepository
     private let stationsListService: StationsListServiceProtocol
     
-    private var isLoading: Bool = false
+    private(set) var isLoading: Bool = false
     private var cities: [Settlement] = []
     
     
@@ -73,7 +73,7 @@ class CitySearchViewModel {
     
     // MARK: - Init
     init(
-        repository: CitiesRepository,
+        repository: CitiesWithStationsRepository,
         stationsListService: StationsListServiceProtocol
     ) {
 
@@ -92,7 +92,7 @@ class CitySearchViewModel {
                 return
             }
         } catch {
-            logger.error("DB error: \(error)")
+            logger.error("Data base error: \(error)")
         }
         await fetchAllStations()
     }

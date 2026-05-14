@@ -42,6 +42,12 @@ struct CitySearchView: View {
                 CitySearchListView(station: $station,
                                    isDismissing: $isDismissing,
                                    cities: viewModel.filteredCities)
+                .disabled(viewModel.isLoading)
+                
+                if viewModel.isLoading {
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
         }
                 

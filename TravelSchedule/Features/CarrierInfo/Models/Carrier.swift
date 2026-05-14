@@ -7,7 +7,14 @@
 
 struct Carrier: Codable {
     let title: String
-    let phone: String
-    let email: String
-    let logo: String
+    let phone: String?
+    let email: String?
+    let logo: String?
+    
+    static let empty = Carrier(
+        title: "",
+        phone: nil,
+        email: nil,
+        logo: nil
+    )
 }

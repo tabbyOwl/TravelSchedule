@@ -16,8 +16,8 @@ enum APIKeyError: Error {
 protocol ServiceFactoryProtocol {
     func makeScheduleService() -> ScheduleBetweenStationsProtocol
     func makeStationsService() -> StationsListServiceProtocol
+    func makeCarrierInfoService() -> CarrierInfoServiceProtocol
 }
-
 
 final class ServiceFactory: ServiceFactoryProtocol {
     
@@ -35,5 +35,9 @@ final class ServiceFactory: ServiceFactoryProtocol {
     
     func makeStationsService() -> StationsListServiceProtocol {
         StationsListService(client: client, apikey: apiKey)
+    }
+    
+    func makeCarrierInfoService() -> CarrierInfoServiceProtocol {
+        CarrierInfoService(client: client, apikey: apiKey)
     }
 }

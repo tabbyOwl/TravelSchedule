@@ -11,10 +11,12 @@ struct RouteListView: View {
     
     // MARK: - State
     @State private var viewModel: RouteListViewModel
+    private let factory: ServiceFactoryProtocol
     
     // MARK: - Init
-    init(viewModel: RouteListViewModel) {
-        self.viewModel = viewModel
+    init(viewModel: RouteListViewModel, factory: ServiceFactoryProtocol) {
+        _viewModel = State(initialValue: viewModel)
+        self.factory = factory
     }
     
     // MARK: - Body
@@ -23,6 +25,9 @@ struct RouteListView: View {
             header
             content
                 .toolbarVisibility(.hidden, for: .tabBar)
+                .task {
+                    await viewModel.loadSchedule()
+                }
         }
     }
 }
@@ -39,26 +44,33 @@ private extension RouteListView {
 private extension RouteListView {
     @ViewBuilder
     var content: some View {
-        if viewModel.filteredSegments.isEmpty {
-            VStack{
-                Spacer()
+        VStack {
+            if viewModel.isLoading {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if viewModel.filteredSegments.isEmpty {
                 NoDataView(text: "Вариантов нет")
-                Spacer()
-                if viewModel.isFiltersOn {
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }else if viewModel.isFiltersOn {
                     FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
                                          showTransfers: $viewModel.showTransfers,
                                          isFiltersOn: viewModel.isFiltersOn)
+                
+            } else {
+                ZStack(alignment: .bottom) {
+                    RouteSegmentsListView(segments: viewModel.filteredSegments, factory: factory)
+                        .safeAreaInset(edge: .bottom) {
+
+                              Color.clear.frame(height: 80)
+
+                          }
+                    FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals, showTransfers: $viewModel.showTransfers, isFiltersOn: viewModel.isFiltersOn)
                 }
             }
             
-        } else {
-            ZStack(alignment: .bottom) {
-                RouteSegmentsListView(segments: viewModel.filteredSegments)
-                
-                FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals, showTransfers: $viewModel.showTransfers, isFiltersOn: viewModel.isFiltersOn)
-            }
         }
     }
+    
 }
 
 //#Preview {

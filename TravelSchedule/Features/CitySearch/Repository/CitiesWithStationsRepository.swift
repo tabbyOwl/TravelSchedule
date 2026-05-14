@@ -14,7 +14,7 @@ struct CitiesData {
 }
 
 @ModelActor
-actor CitiesRepository {
+actor CitiesWithStationsRepository {
     
     private let logger = Logger(label: "CitiesRepository")
     
@@ -25,8 +25,6 @@ actor CitiesRepository {
         let entities = try modelContext.fetch(descriptor)
         
         let displayedCitiesNames = DisplayedData.citiesList
-        
-        let orderMap = Dictionary(uniqueKeysWithValues: displayedCitiesNames.enumerated().map { ($0.element, $0.offset)})
         
         let displayedEntities = entities.filter {
             displayedCitiesNames.contains($0.title)
@@ -67,7 +65,7 @@ actor CitiesRepository {
                 }
             )
         }
-        print(cities.count, displayedCities.count)
+        
         return CitiesData(
             cities: cities,
             displayedCities: displayedCities
@@ -124,4 +122,6 @@ actor CitiesRepository {
 
         logger.info("Successfully saved to swiftData")
     }
+    
 }
+

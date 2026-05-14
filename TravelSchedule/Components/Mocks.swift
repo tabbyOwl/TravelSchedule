@@ -45,13 +45,14 @@ func generateSegments(count: Int, startHour: Int) -> [Segment] {
         let arrival = String(format: "%02d:45", arrivalHour)
         
         return Segment(
+            id: "id",
             carrierName: "ОАО «РЖД»",
             carrierCode: 689,
             logo: "",
             hasTransfers: false,
             departure: departure,
             arrival: arrival,
-            duration: "11 часов",
+            duration: 11,
             date: "13 апреля"
         )
     }

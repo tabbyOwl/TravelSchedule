@@ -5,18 +5,65 @@
 //  Created by Svetlana on 2026/4/20.
 //
 import SwiftUI
+import Logging
+
+enum CarrierInfoState {
+    case loading
+    case loaded
+    case failed
+}
 
 @Observable
 final class CarrierInfoViewModel {
     
-    private var _carrier: Carrier
+    //MARK: - Private properties
+    private let logger = Logger(label: "CarrierInfoViewModel")
+    private var code: String
+    private let carrierInfoService: CarrierInfoServiceProtocol
+    private let repository: CarrierInfoRepository
+    private(set) var carrier: Carrier = .empty
+    private(set) var isLoading = false
+    private(set) var state: CarrierInfoState = .loading
     
-    var carrier: Carrier {
-        _carrier
+    //MARK: - Init
+    init(code: String, carrierInfoService: CarrierInfoServiceProtocol, repository: CarrierInfoRepository) {
+        self.code = code
+        self.carrierInfoService = carrierInfoService
+        self.repository = repository
     }
     
-    init(carrier: Carrier) {
-        self._carrier = carrier
+    //MARK: - Public methods
+    func loadCarrierInfo() async {
+        do {
+           try await updateCarrierInfoFromDataBase()
+            
+            if state != .loading {
+                return
+            }
+        } catch {
+            logger.error("Database error: \(error)")
+        }
+        await fetchCarrierInfo()
     }
     
+    //MARK: - Public methods
+    private func fetchCarrierInfo() async {
+        state = .loading
+     
+        do {
+            let carrier = try await carrierInfoService.getCarrierInfo(code: code)
+            try await repository.saveCarrierInfo(for: code, carrierInfo: carrier)
+            try await updateCarrierInfoFromDataBase()
+        } catch {
+            state = .failed
+        }
+    }
+    
+    private func updateCarrierInfoFromDataBase() async throws {
+        if let data = try await repository.loadCarrierInfo(for: code) {
+            carrier = data
+            logger.info("Loaded from database")
+            state = .loaded
+        }
+    }
 }
