@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Station: Identifiable, Codable {
+struct Station: Identifiable, Codable, Sendable {
     let id: String
     let title: String
     let code: String

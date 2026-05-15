@@ -14,37 +14,21 @@ import OpenAPIRuntime
 @Observable
 class CitySearchViewModel {
     
-    var errorMode: ErrorMode?
     var searchText: String = ""
+    
     // MARK: - Private Properties
+
     private let logger = Logger(label: "CitySearchViewModel")
     private let repository: CitiesWithStationsRepository
     private let stationsListService: StationsListServiceProtocol
-    
-    private(set) var isLoading: Bool = false
+    private(set) var errorMode: ErrorMode?
+    private(set) var state: ViewState = .loaded
+    private var displayedCities: [Settlement] = []
     private var cities: [Settlement] = []
-    
-    
-    private var loadedDisplayedCities: [Settlement] = []
-    
-    private var placeholderCities: [Settlement] {
-        DisplayedData.citiesList.map {
-            Settlement(id: $0, title: $0, stations: [])
-        }
-    }
-    
-    var displayedCities: [Settlement] {
-        loadedDisplayedCities.isEmpty ? placeholderCities : loadedDisplayedCities
-    }
-    
+  
     // MARK: - Computed Properties
-   
-    var shouldShowSearchLoading: Bool {
-        isLoading && !searchText.isEmpty
-    }
-    
     var hasNoResults: Bool {
-        !searchText.isEmpty && filteredCities.isEmpty && !isLoading
+        !searchText.isEmpty && filteredCities.isEmpty
     }
     
     /// Фильтрует города по поисковому запросу и сортирует их по релевантности:
@@ -88,6 +72,7 @@ class CitySearchViewModel {
             try await updateCitiesFromDatabase()
             
             if !cities.isEmpty {
+                state = .loaded
                 logger.info("Loaded from database")
                 return
             }
@@ -102,13 +87,8 @@ class CitySearchViewModel {
     }
     
     func fetchAllStations() async {
-        isLoading = true
         errorMode = nil
-        
-        defer {
-            isLoading = false
-        }
-        
+        state = .loading
         do {
             logger.info("Fetching stations...")
             let allStations = try await stationsListService.getAllStations()
@@ -127,11 +107,11 @@ class CitySearchViewModel {
            
             try await updateCitiesFromDatabase()
             
-            isLoading = false
+            state = .loaded
         } catch is CancellationError {}
         catch {
-            
             logger.error("\(error)")
+            state = .failed
             
             if let clientError = error as? ClientError {
                 if let underlyingError = clientError.underlyingError as? URLError {
@@ -177,7 +157,7 @@ class CitySearchViewModel {
     private func updateCitiesFromDatabase() async throws {
         let data = try await repository.loadCities()
         
-        self.loadedDisplayedCities = data.displayedCities
+        self.displayedCities = data.displayedCities
         self.cities = data.cities
     }
     

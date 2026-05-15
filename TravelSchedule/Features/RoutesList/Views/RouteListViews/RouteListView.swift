@@ -31,6 +31,7 @@ struct RouteListView: View {
         }
     }
 }
+
 // MARK: - Header
 private extension RouteListView {
     var header: some View {
@@ -44,33 +45,40 @@ private extension RouteListView {
 private extension RouteListView {
     @ViewBuilder
     var content: some View {
-        VStack {
-            if viewModel.isLoading {
-                ProgressView()
+        Spacer()
+        switch viewModel.state {
+            
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .failed:
+            if let errorMode = viewModel.errorMode {
+                ErrorView(mode: errorMode)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if viewModel.filteredSegments.isEmpty {
+            }
+            
+        case .loaded:
+            if viewModel.filteredSegments.isEmpty {
                 NoDataView(text: "Вариантов нет")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }else if viewModel.isFiltersOn {
-                    FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
-                                         showTransfers: $viewModel.showTransfers,
-                                         isFiltersOn: viewModel.isFiltersOn)
-                
             } else {
                 ZStack(alignment: .bottom) {
                     RouteSegmentsListView(segments: viewModel.filteredSegments, factory: factory)
                         .safeAreaInset(edge: .bottom) {
-
-                              Color.clear.frame(height: 80)
-
-                          }
-                    FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals, showTransfers: $viewModel.showTransfers, isFiltersOn: viewModel.isFiltersOn)
+                            Color.clear.frame(height: 80)
+                        }
                 }
+                FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals, showTransfers: $viewModel.showTransfers, isFiltersOn: viewModel.isFiltersOn)
             }
+        
+        if viewModel.isFiltersOn {
+            FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
+                                 showTransfers: $viewModel.showTransfers,
+                                 isFiltersOn: viewModel.isFiltersOn)
             
         }
     }
-    
+}
 }
 
 //#Preview {

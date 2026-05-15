@@ -39,10 +39,15 @@ struct ErrorView: View {
     }
     
     var body: some View {
+        VStack(spacing: 16) {
             image
-        
+                .resizable()
+                .scaledToFit()
+                .frame(width: 220, height: 220)
+            
             Text(title)
-            .font(.system(size: 24, weight: .bold))
+                .font(.system(size: 24, weight: .bold))
+        }
     }
 }
 

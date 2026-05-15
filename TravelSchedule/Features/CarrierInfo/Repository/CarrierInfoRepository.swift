@@ -24,7 +24,7 @@ actor CarrierInfoRepository {
         guard let info = carrierInfo.first else {
             return nil
         }
-        print("🌸\(info.phone)")
+        
         return Carrier(title: info.title,
                        phone: info.phone,
                        email: info.email,

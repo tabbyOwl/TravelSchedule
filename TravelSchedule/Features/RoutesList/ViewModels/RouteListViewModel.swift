@@ -6,6 +6,7 @@
 //
 import Foundation
 import Logging
+import OpenAPIRuntime
 
 @MainActor
 @Observable
@@ -18,11 +19,12 @@ class RouteListViewModel {
     
     // MARK: - Private Properties
     private let logger = Logger(label: "RouteListViewModel")
-    private(set) var isLoading = false
     private let from: Station
     private let to: Station
     private let scheduleService: ScheduleBetweenStationsProtocol
     private let repository: RouteRepository
+    private(set) var state: ViewState = .loaded
+    private(set) var errorMode: ErrorMode?
     
     private var routeId: String {
         "\(from.code)-\(to.code)"
@@ -107,7 +109,7 @@ class RouteListViewModel {
     }
     
     private func fetchSchedule() async {
-        isLoading = true
+        state = .loading
         do {
             logger.info("Fetching schedule...")
             let schedule = try await scheduleService.getScheduleBetweenStations(from: from.code, to: to.code)
@@ -120,9 +122,25 @@ class RouteListViewModel {
             
             logger.info(" Successfully fetched schedule...")
         } catch {
-            logger.error("Error fetching schedule: \(error.localizedDescription)")
+            logger.error("\(error)")
+            state = .failed
+            
+            if let clientError = error as? ClientError {
+                if let underlyingError = clientError.underlyingError as? URLError {
+
+                    switch underlyingError.code {
+                    case .notConnectedToInternet,
+                            .networkConnectionLost:
+                        errorMode = .noInternet
+                    default:
+                        errorMode = .serverError
+                    }
+                    return
+                }
+            }
+            errorMode = .serverError
         }
-        isLoading = false
+        state = .loaded
     }
     
     private func updateSegmentsFromDatabase() async throws {

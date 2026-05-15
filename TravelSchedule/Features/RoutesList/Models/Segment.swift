@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Segment: Identifiable {
+struct Segment: Identifiable, Sendable {
     let id: String
     let carrierName: String
     let carrierCode: Int

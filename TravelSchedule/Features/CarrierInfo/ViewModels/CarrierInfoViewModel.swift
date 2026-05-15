@@ -7,12 +7,6 @@
 import SwiftUI
 import Logging
 
-enum CarrierInfoState {
-    case loading
-    case loaded
-    case failed
-}
-
 @Observable
 final class CarrierInfoViewModel {
     
@@ -23,7 +17,7 @@ final class CarrierInfoViewModel {
     private let repository: CarrierInfoRepository
     private(set) var carrier: Carrier = .empty
     private(set) var isLoading = false
-    private(set) var state: CarrierInfoState = .loading
+    private(set) var state: ViewState = .loading
     
     //MARK: - Init
     init(code: String, carrierInfoService: CarrierInfoServiceProtocol, repository: CarrierInfoRepository) {

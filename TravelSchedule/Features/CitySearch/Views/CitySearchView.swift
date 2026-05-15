@@ -30,34 +30,35 @@ struct CitySearchView: View {
     // MARK: - Body
     var body: some View {
         
-        Group {
-            if let errorMode = viewModel.errorMode {
-                ErrorView(mode: errorMode)
-            } else if viewModel.shouldShowSearchLoading {
-                ProgressView()
-            }
-            else if viewModel.hasNoResults {
-                NoDataView(text: "Город не найден")
-            } else {
-                CitySearchListView(station: $station,
-                                   isDismissing: $isDismissing,
-                                   cities: viewModel.filteredCities)
-                .disabled(viewModel.isLoading)
-                
-                if viewModel.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ZStack {
+            switch viewModel.state {
+            case .loading:
+                ProgressView("Идет загрузка...")
+            case .failed:
+                if let errorMode = viewModel.errorMode {
+                    ErrorView(mode: errorMode)
                 }
+            case .loaded:
+                Group {
+                    if viewModel.hasNoResults {
+                        NoDataView(text: "Город не найден")
+                    } else {
+                        CitySearchListView(station: $station,
+                                           isDismissing: $isDismissing,
+                                           cities: viewModel.filteredCities)
+                    }
+                }
+                
             }
         }
-                
-                .searchable(
-                    text: $viewModel.searchText,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: "Введите запрос"
-                )
+        
+        .searchable(
+            text: $viewModel.searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "Введите запрос"
+        )
         .toolbarVisibility(.hidden, for: .tabBar)
-    
+        
         .task {
             await viewModel.loadCities()
         }
@@ -68,6 +69,7 @@ struct CitySearchView: View {
         }
     }
 }
+
 
 //#Preview {
 //

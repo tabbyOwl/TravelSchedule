@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Settlement: Identifiable, Codable {
+struct Settlement: Identifiable, Codable, Sendable {
     let id: String
     let title: String
     let stations: [Station]
