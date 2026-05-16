@@ -8,17 +8,22 @@ import Logging
 import Foundation
 import SwiftData
 
+protocol CitiesWithStationsRepositoryProtocol {
+    func load() async throws -> CitiesData
+    func save(_ settlements: [Components.Schemas.Settlement]) async throws
+}
+
 struct CitiesData {
     let cities: [Settlement]
     let displayedCities: [Settlement]
 }
 
 @ModelActor
-actor CitiesWithStationsRepository {
+actor CitiesWithStationsRepository: CitiesWithStationsRepositoryProtocol {
     
     private let logger = Logger(label: "CitiesRepository")
     
-    func loadCities() throws -> CitiesData {
+    func load() throws -> CitiesData {
         
         let descriptor = FetchDescriptor<SettlementEntity>()
         
@@ -72,7 +77,7 @@ actor CitiesWithStationsRepository {
         )
     }
     
-    func saveSettlements(_ settlements: [Components.Schemas.Settlement]) throws {
+    func save(_ settlements: [Components.Schemas.Settlement]) throws {
 
         logger.info("Saving to swiftData...")
 

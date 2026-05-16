@@ -42,5 +42,6 @@ struct StoriesTabView: View {
 }
 
 #Preview {
-    StoriesTabView(currentStoryIndex: .constant(0), stories: mockStoryGroups[1].stories)
+    StoriesTabView(currentStoryIndex: .constant(0),
+                   stories: mockStoryGroups[1].stories)
 }

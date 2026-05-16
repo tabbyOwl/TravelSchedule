@@ -14,12 +14,12 @@ struct RouteSegmentsListView: View {
     
     // MARK: - Private Properties
     private var segments: [Segment]
-    private let factory: ServiceFactoryProtocol
+    private let carrierInfoService: CarrierInfoServiceProtocol
     
     // MARK: - Init
-    init(segments: [Segment], factory: ServiceFactoryProtocol) {
+    init(segments: [Segment], carrierInfoService: CarrierInfoServiceProtocol) {
         self.segments = segments
-        self.factory = factory
+        self.carrierInfoService = carrierInfoService
     }
     
     // MARK: - Body
@@ -28,7 +28,6 @@ struct RouteSegmentsListView: View {
             ForEach(segments) { segment in
                 NavigationLink(destination: CarrierInfoView(viewModel: makeCarrierInfoViewModel(with: String(segment.carrierCode)))) {
                     RouteCardCell(segment: segment)
-                        
                         .foregroundStyle(.blackUniversal)
                 }
             }
@@ -36,13 +35,13 @@ struct RouteSegmentsListView: View {
     }
     
     private func makeCarrierInfoViewModel(with code: String) -> CarrierInfoViewModel {
-            let service = factory.makeCarrierInfoService()
             let repository = CarrierInfoRepository(modelContainer: modelContext.container)
-            return CarrierInfoViewModel(code: code, carrierInfoService: service, repository: repository)
+        return CarrierInfoViewModel(code: code, service: carrierInfoService, repository: repository)
 
     }
 }
 
-//#Preview {
-//    RouteSegmentsListView(segments: [], factory: ServiceFactory())
-//}
+#Preview {
+    RouteSegmentsListView(segments: mockSegments,
+                          carrierInfoService: MockCarrierInfoService())
+}

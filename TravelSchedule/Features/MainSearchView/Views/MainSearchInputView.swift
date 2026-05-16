@@ -44,6 +44,9 @@ struct MainSearchInputView: View {
     }
 }
 
-//#Preview {
-//    MainSearchInputView(viewModel: .constant(MainSearchViewModel()))
-//}
+#Preview {
+    MainSearchInputView(viewModel: .constant(MainSearchViewModel()),
+                        citySearchViewModel: CitySearchViewModel(
+                            repository: MockCitiesWithStationsRepository(),
+                            stationsListService: MockStationsListService()))
+}

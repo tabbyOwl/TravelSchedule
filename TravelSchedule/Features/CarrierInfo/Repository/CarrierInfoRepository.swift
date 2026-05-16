@@ -8,13 +8,18 @@ import SwiftData
 import Logging
 import Foundation
 
+
+protocol CarrierInfoRepositoryProtocol {
+    func save(for code: String, carrierInfo: Components.Schemas.CarrierResponse) async throws
+    func load(for code: String) async throws -> Carrier?
+}
+
 @ModelActor
-actor CarrierInfoRepository {
+actor CarrierInfoRepository: CarrierInfoRepositoryProtocol {
     
     private let logger = Logger(label: "CarrierInfoRepository")
     
-    func loadCarrierInfo(for code: String) throws -> Carrier? {
-        
+    func load(for code: String) async throws -> Carrier? {
         let descriptor = FetchDescriptor<CarrierEntity>(
             predicate: #Predicate { $0.code == code }
         )
@@ -31,7 +36,7 @@ actor CarrierInfoRepository {
                        logo: info.logo)
     }
     
-    func saveCarrierInfo(for code: String, carrierInfo: Components.Schemas.CarrierResponse) throws {
+    func save(for code: String, carrierInfo: Components.Schemas.CarrierResponse) async throws {
     
         let descriptor = FetchDescriptor<CarrierEntity>(
             predicate: #Predicate { $0.code == code }

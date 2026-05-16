@@ -11,12 +11,12 @@ struct RouteListView: View {
     
     // MARK: - State
     @State private var viewModel: RouteListViewModel
-    private let factory: ServiceFactoryProtocol
+    private let carrierInfoService: CarrierInfoServiceProtocol
     
     // MARK: - Init
-    init(viewModel: RouteListViewModel, factory: ServiceFactoryProtocol) {
+    init(viewModel: RouteListViewModel, carrierInfoService: CarrierInfoServiceProtocol) {
         _viewModel = State(initialValue: viewModel)
-        self.factory = factory
+        self.carrierInfoService = carrierInfoService
     }
     
     // MARK: - Body
@@ -27,6 +27,9 @@ struct RouteListView: View {
                 .toolbarVisibility(.hidden, for: .tabBar)
                 .task {
                     await viewModel.loadSchedule()
+                }
+                .refreshable {
+                    await viewModel.refreshSchedule()
                 }
         }
     }
@@ -58,29 +61,33 @@ private extension RouteListView {
             }
             
         case .loaded:
-            if viewModel.filteredSegments.isEmpty {
-                NoDataView(text: "Вариантов нет")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                ZStack(alignment: .bottom) {
-                    RouteSegmentsListView(segments: viewModel.filteredSegments, factory: factory)
+            ZStack(alignment: .bottom) {
+                if viewModel.filteredSegments.isEmpty {
+                    NoDataView(text: "Вариантов нет")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    
+                    RouteSegmentsListView(segments: viewModel.filteredSegments, carrierInfoService: carrierInfoService)
                         .safeAreaInset(edge: .bottom) {
                             Color.clear.frame(height: 80)
                         }
                 }
-                FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals, showTransfers: $viewModel.showTransfers, isFiltersOn: viewModel.isFiltersOn)
+                
+                FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
+                                     showTransfers: $viewModel.showTransfers,
+                                     isFiltersOn: viewModel.isFiltersOn)
+                
+                
             }
-        
-        if viewModel.isFiltersOn {
-            FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
-                                 showTransfers: $viewModel.showTransfers,
-                                 isFiltersOn: viewModel.isFiltersOn)
-            
         }
     }
 }
-}
 
-//#Preview {
-//    RouteListView(viewModel: RouteListViewModel(from: mockStation, to: mockStation))
-//}
+
+#Preview {
+    RouteListView(viewModel: RouteListViewModel(from: mockStations[0],
+                                                to: mockStations[1],
+                                                scheduleService: MockScheduleService(),
+                                                repository: MockRouteRepository()),
+                  carrierInfoService: MockCarrierInfoService())
+}

@@ -13,10 +13,13 @@ struct LogoImageView: View {
     let url: String?
     
     @State private var image: UIImage?
+    @State private var isLoading = false
     
     var body: some View {
         Group {
-            if let image {
+            if isLoading {
+                ProgressView()
+            } else if let image {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -32,6 +35,8 @@ struct LogoImageView: View {
             image = nil
             
             guard let url else { return }
+            isLoading = true
+            defer { isLoading = false }
             
             let downloadedImage = await imageDownloader.downloadImage(from: url)
             

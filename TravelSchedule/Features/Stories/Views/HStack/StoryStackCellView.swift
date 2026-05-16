@@ -49,5 +49,10 @@ struct StoryStackCellView: View {
     @Previewable
     @Namespace var animation
     
-    StoryStackCellView(viewModel: StoryStackCellViewModel(preview: "Story1Preview", title: "Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text", isViewed: false), animation: animation)
+    StoryStackCellView(viewModel:
+                        StoryStackCellViewModel(preview: "Story1PreviewImage",
+                                                          
+                                                title: "Text Text Text Text Text Text",
+                                                isViewed: false),
+                        animation: animation)
 }

@@ -48,7 +48,9 @@ struct StationSearchView: View {
 
 #Preview {
     NavigationStack {
-        StationSearchView(station: .constant(mockStation), isDismissing: .constant(false), viewModel: StationSearchViewModel(stations: [mockStation]))
+        StationSearchView(station: .constant(mockStations[0]),
+                          isDismissing: .constant(false),
+                          viewModel: StationSearchViewModel(stations: mockStations))
     }
 }
 

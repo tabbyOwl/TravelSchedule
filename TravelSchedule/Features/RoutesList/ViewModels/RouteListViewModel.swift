@@ -22,9 +22,10 @@ class RouteListViewModel {
     private let from: Station
     private let to: Station
     private let scheduleService: ScheduleBetweenStationsProtocol
-    private let repository: RouteRepository
+    private let repository: RouteRepositoryProtocol
     private(set) var state: ViewState = .loaded
     private(set) var errorMode: ErrorMode?
+    private var isLoading = false
     
     private var routeId: String {
         "\(from.code)-\(to.code)"
@@ -60,7 +61,7 @@ class RouteListViewModel {
     }
     
     // MARK: - Init
-    init(from: Station, to: Station, scheduleService: ScheduleBetweenStationsProtocol, repository: RouteRepository) {
+    init(from: Station, to: Station, scheduleService: ScheduleBetweenStationsProtocol, repository: RouteRepositoryProtocol) {
         self.from = from
         self.to = to
         self.scheduleService = scheduleService
@@ -70,7 +71,6 @@ class RouteListViewModel {
     // MARK: - Public Methods
     
     func loadSchedule() async {
-        
         do {
             try await updateSegmentsFromDatabase()
             
@@ -81,6 +81,10 @@ class RouteListViewModel {
         } catch {
             logger.error("Data base error: \(error)")
         }
+        await fetchSchedule()
+    }
+    
+    func refreshSchedule() async {
         await fetchSchedule()
     }
     
@@ -95,20 +99,12 @@ class RouteListViewModel {
         return hours * 60 + minutes
     }
     
-    private func formattedDuration(_ duration: Int) -> String {
-        let totalHours = duration / 3600
-        
-        let days = totalHours / 24
-        let hours = totalHours % 24
-        
-        if days > 0 {
-            return "\(days) д \(hours) ч"
-        } else {
-            return "\(hours) часов"
-        }
-    }
-    
     private func fetchSchedule() async {
+        
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        
         state = .loading
         do {
             logger.info("Fetching schedule...")
@@ -121,26 +117,12 @@ class RouteListViewModel {
             try await updateSegmentsFromDatabase()
             
             logger.info(" Successfully fetched schedule...")
+            state = .loaded
         } catch {
             logger.error("\(error)")
             state = .failed
-            
-            if let clientError = error as? ClientError {
-                if let underlyingError = clientError.underlyingError as? URLError {
-
-                    switch underlyingError.code {
-                    case .notConnectedToInternet,
-                            .networkConnectionLost:
-                        errorMode = .noInternet
-                    default:
-                        errorMode = .serverError
-                    }
-                    return
-                }
-            }
-            errorMode = .serverError
+            errorMode = error.asErrorMode
         }
-        state = .loaded
     }
     
     private func updateSegmentsFromDatabase() async throws {

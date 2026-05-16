@@ -10,25 +10,19 @@ import OpenAPIRuntime
 import OpenAPIURLSession
 
 typealias ScheduleBetweenStations = Components.Schemas.Segments
+
 protocol ScheduleBetweenStationsProtocol {
     func getScheduleBetweenStations(from: String, to: String) async throws -> ScheduleBetweenStations
 }
 
-final class ScheduleBetweenStationsService: ScheduleBetweenStationsProtocol, APIService {
-    private let client: Client
-    private let apikey: String
+final class ScheduleBetweenStationsService: ScheduleBetweenStationsProtocol {
+    private let networkClient: NetworkClient
     
-    init(client: Client, apikey: String) {
-        self.client = client
-        self.apikey = apikey
+    init(networkClient: NetworkClient) {
+        self.networkClient = networkClient
     }
     
     func getScheduleBetweenStations(from: String, to: String) async throws -> ScheduleBetweenStations {
-        let response = try await client.getSchedualBetweenStations(query: .init(
-            apikey: apikey,
-            from: from,
-            to: to
-        ))
-        return try response.ok.body.json
-    }
+            try await networkClient.getScheduleBetweenStations(from: from,to: to)
+        }
 }

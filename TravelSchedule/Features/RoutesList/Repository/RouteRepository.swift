@@ -9,8 +9,12 @@ import Logging
 import SwiftData
 import Foundation
 
+protocol RouteRepositoryProtocol {
+    func loadSchedule(for routeId: String) async throws -> [Segment]
+    func saveSchedule(for roureId: String,  segments: [Components.Schemas.Segment]) async throws
+}
 @ModelActor
-actor RouteRepository {
+actor RouteRepository: RouteRepositoryProtocol {
     
     private let logger = Logger(label: "RouteRepository")
     
@@ -47,7 +51,6 @@ actor RouteRepository {
         )
         
         var routeEntity = RouteEntity(id: routeId)
-        
         
         if let existing = try modelContext.fetch(descriptor).first {
             routeEntity = existing

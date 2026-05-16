@@ -43,8 +43,10 @@ struct CitySearchListView: View {
     }
 }
 
-//#Preview {
-//    
-//    CitySearchView(station: .constant(Station(id: UUID(), title: "", code: "")),
-//                   viewModel: CitySearchViewModel(serviceFactory: DefaultServiceFactory(), modelContext: ModelContext(ModelContainer())))
-//}
+#Preview {
+    NavigationStack {
+        CitySearchListView(station: .constant(mockStations[0]),
+                           isDismissing: .constant(false),
+                           cities: mockCitiesList)
+    }
+}

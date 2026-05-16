@@ -48,5 +48,7 @@ struct StationSearchListView: View {
 }
 
 #Preview {
-    StationSearchListView(station: .constant(mockStation), isDismissing: .constant(false), stations: mockCitiesList[0].stations)
+    StationSearchListView(station: .constant(mockStations[0]),
+                          isDismissing: .constant(false),
+                          stations: mockCitiesList[0].stations)
 }

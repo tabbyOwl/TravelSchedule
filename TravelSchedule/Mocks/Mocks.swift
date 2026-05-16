@@ -14,17 +14,16 @@ let baseStations = [
     "Ленинградский вокзал"
 ]
 
-let mockStation = Station(id: "9", title: "Казанский вокзал", code: "8")
+let mockStations = baseStations.map { title in
+    Station(id: title, title: title, code: "")
+}
 
 // MARK: - Cities
 func createCity(_ city: String) -> Settlement {
-    let stations = baseStations.map {
-        Station(id: "9", title: "\(city) (\($0))", code: "")
-    }
-    return Settlement(id: "6", title: city, stations: stations)
+    return Settlement(id: UUID().uuidString, title: city, stations: mockStations)
 }
 
-let mockCity = Settlement(id: "65", title: "Москва", stations: [mockStation])
+let mockCity = Settlement(id: "65", title: "Москва", stations: mockStations)
 
 let mockCitiesList: [Settlement] = [
     createCity("Москва"),
@@ -38,21 +37,21 @@ let mockCitiesList: [Settlement] = [
 // MARK: - Segments
 func generateSegments(count: Int, startHour: Int) -> [Segment] {
     (0..<count).map { i in
-        let departureHour = startHour + i
+        let departureHour = (startHour + i) % 24
         let arrivalHour = (departureHour + 11) % 24
         
         let departure = String(format: "%02d:05", departureHour)
         let arrival = String(format: "%02d:45", arrivalHour)
         
         return Segment(
-            id: "id",
+            id: "\(i)",
             carrierName: "ОАО «РЖД»",
             carrierCode: 689,
             logo: "",
             hasTransfers: false,
             departure: departure,
             arrival: arrival,
-            duration: 11,
+            duration: 11 * 3600,
             date: "13 апреля"
         )
     }
@@ -66,3 +65,5 @@ let mockCarrier = Carrier(title: "ОАО «РЖД»ђ", phone: "+7 (904) 329-27-
 // MARK: - Stories
 let text = "Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text"
 let mockStoryGroups = StoriesMaker.makeStoriesGroups()
+
+

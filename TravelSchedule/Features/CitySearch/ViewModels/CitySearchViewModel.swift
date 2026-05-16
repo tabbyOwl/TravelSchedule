@@ -19,13 +19,14 @@ class CitySearchViewModel {
     // MARK: - Private Properties
 
     private let logger = Logger(label: "CitySearchViewModel")
-    private let repository: CitiesWithStationsRepository
+    private let repository: CitiesWithStationsRepositoryProtocol
     private let stationsListService: StationsListServiceProtocol
     private(set) var errorMode: ErrorMode?
     private(set) var state: ViewState = .loaded
     private var displayedCities: [Settlement] = []
     private var cities: [Settlement] = []
-  
+    private var isLoading = false
+    
     // MARK: - Computed Properties
     var hasNoResults: Bool {
         !searchText.isEmpty && filteredCities.isEmpty
@@ -57,7 +58,7 @@ class CitySearchViewModel {
     
     // MARK: - Init
     init(
-        repository: CitiesWithStationsRepository,
+        repository: CitiesWithStationsRepositoryProtocol,
         stationsListService: StationsListServiceProtocol
     ) {
 
@@ -87,6 +88,11 @@ class CitySearchViewModel {
     }
     
     func fetchAllStations() async {
+        
+        guard !isLoading else { return }
+            isLoading = true
+        defer { isLoading = false }
+        
         errorMode = nil
         state = .loading
         do {
@@ -103,31 +109,17 @@ class CitySearchViewModel {
             
             logger.info("Successfully fetched stations list.")
             
-            try await repository.saveSettlements(filteredSettlements)
+            try await repository.save(filteredSettlements)
            
             try await updateCitiesFromDatabase()
             
             state = .loaded
         } catch is CancellationError {}
         catch {
-            logger.error("\(error)")
-            state = .failed
-            
-            if let clientError = error as? ClientError {
-                if let underlyingError = clientError.underlyingError as? URLError {
-
-                    switch underlyingError.code {
-                    case .notConnectedToInternet,
-                            .networkConnectionLost:
-                        errorMode = .noInternet
-                    default:
-                        errorMode = .serverError
-                    }
-                    return
-                }
+                logger.error("\(error)")
+                state = .failed
+                errorMode = error.asErrorMode
             }
-            errorMode = .serverError
-        }
     }
     
     //MARK: - Private methods
@@ -155,7 +147,7 @@ class CitySearchViewModel {
     }
     
     private func updateCitiesFromDatabase() async throws {
-        let data = try await repository.loadCities()
+        let data = try await repository.load()
         
         self.displayedCities = data.displayedCities
         self.cities = data.cities

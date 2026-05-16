@@ -75,6 +75,13 @@ private extension CarrierInfoView {
     }
 }
 
-//#Preview {
-//    CarrierInfoView(viewModel: CarrierInfoViewModel(code: "", carrierInfoService: CarrierInfoServiceProtocol(), repository: CarrierInfoRepository())
-//}
+
+#Preview {
+    CarrierInfoView(
+        viewModel: CarrierInfoViewModel(
+            code: "SU",
+            service: MockCarrierInfoService(),
+            repository: MockCarrierInfoRepository()
+        )
+    )
+}

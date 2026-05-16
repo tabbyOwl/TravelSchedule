@@ -71,19 +71,8 @@ struct CitySearchView: View {
 }
 
 
-//#Preview {
-//
-//    CitySearchView(
-//        station: .constant(mockStation),
-//        viewModel: .mock
-//    )
-//}
-//
-//extension CitySearchViewModel {
-//
-//    static let mock = CitySearchViewModel(
-//        repository: MockRepository(),
-//        stationsListService: MockStationsListService(),
-//        nearestStationsService: MockNearestStationsService()
-//    )
-//}
+#Preview {
+    CitySearchView(station: .constant(mockStations[0]),
+                   viewModel: CitySearchViewModel(repository: MockCitiesWithStationsRepository(),
+                                                  stationsListService: MockStationsListService()))
+}
