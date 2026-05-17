@@ -7,9 +7,7 @@
 
 final class MockCarrierInfoRepository: CarrierInfoRepositoryProtocol {
     
-    func save(for code: String, carrierInfo: Components.Schemas.CarrierResponse) async throws {
-        
-    }
+    func save(for code: String, carrierInfo: Components.Schemas.CarrierResponse) async throws {}
     
     func load(for code: String) throws -> Carrier? {
         Carrier(title: "Аэрофлот",
@@ -18,8 +16,6 @@ final class MockCarrierInfoRepository: CarrierInfoRepositoryProtocol {
                 logo: nil
         )
     }
-    
-    
 }
 
 final class MockCitiesWithStationsRepository: CitiesWithStationsRepositoryProtocol {
@@ -27,10 +23,7 @@ final class MockCitiesWithStationsRepository: CitiesWithStationsRepositoryProtoc
         CitiesData(cities: mockCitiesList, displayedCities: mockCitiesList)
     }
     
-    func save(_ settlements: [Components.Schemas.Settlement]) async throws {
-    }
-    
-    
+    func save(_ settlements: [Components.Schemas.Settlement]) async throws {}
 }
 
 final class MockRouteRepository: RouteRepositoryProtocol {
@@ -39,6 +32,5 @@ final class MockRouteRepository: RouteRepositoryProtocol {
     }
     
     func saveSchedule(for roureId: String, segments: [Components.Schemas.Segment]) async throws {}
-    
     
 }

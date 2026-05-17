@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct MainSearchSearchButton: View {
-
+    
     var body: some View {
-
-        Text("Найти")
+        
+        Text(Strings.MainSearch.search)
             .foregroundStyle(.white)
             .font(.system(size: 17, weight: .bold))
             .padding()

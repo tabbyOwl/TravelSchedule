@@ -22,6 +22,6 @@ class StationSearchViewModel {
     }
     
     var filteredStations: [Station] {
-       return searchText.isEmpty ? stations : stations.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        return searchText.isEmpty ? stations : stations.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
     }
 }

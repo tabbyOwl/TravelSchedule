@@ -71,22 +71,22 @@ struct MainSearchView: View {
     }
     
     private func makeRouteListViewModel() -> RouteListViewModel {
-            let service = factory.scheduleService
-            let repository = RouteRepository(modelContainer: modelContext.container)
-            return RouteListViewModel(
-                from: viewModel.fromStation,
-                to: viewModel.toStation,
-                scheduleService: service,
-                repository: repository
-            )
-
+        let service = factory.scheduleService
+        let repository = RouteRepository(modelContainer: modelContext.container)
+        return RouteListViewModel(
+            from: viewModel.fromStation,
+            to: viewModel.toStation,
+            scheduleService: service,
+            repository: repository
+        )
+        
     }
     
     private func makeCitySearchViewModel() -> CitySearchViewModel {
-            let service = factory.stationsService
-            let repository = CitiesWithStationsRepository(modelContainer: modelContext.container)
-            return CitySearchViewModel(repository: repository, stationsListService: service)
-
+        let service = factory.stationsService
+        let repository = CitiesWithStationsRepository(modelContainer: modelContext.container)
+        return CitySearchViewModel(repository: repository, stationsListService: service)
+        
     }
     
     private func getViewedStories() -> [Int] {

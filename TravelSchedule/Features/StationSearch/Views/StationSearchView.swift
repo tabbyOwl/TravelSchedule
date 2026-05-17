@@ -28,22 +28,22 @@ struct StationSearchView: View {
         content
             .searchable(text: $viewModel.searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Введите запрос")
+                        prompt: Strings.Common.enterSearchText)
     }
     
     // MARK: - Content
     @ViewBuilder
     var content: some View {
-            if viewModel.hasNoResults {
-                NoDataView(text: "Станция не найдена")
-            } else {
-                StationSearchListView(station: $station,
-                                      isDismissing: $isDismissing,
-                                      stations: viewModel.filteredStations)
-                    .navigationTitle("Выбор станции")
-            }
+        if viewModel.hasNoResults {
+            NoDataView(text: Strings.StationSearch.stationNotFound)
+        } else {
+            StationSearchListView(station: $station,
+                                  isDismissing: $isDismissing,
+                                  stations: viewModel.filteredStations)
+            .navigationTitle(Strings.StationSearch.stationSelection)
         }
     }
+}
 
 
 #Preview {

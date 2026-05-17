@@ -35,9 +35,9 @@ struct RouteSegmentsListView: View {
     }
     
     private func makeCarrierInfoViewModel(with code: String) -> CarrierInfoViewModel {
-            let repository = CarrierInfoRepository(modelContainer: modelContext.container)
+        let repository = CarrierInfoRepository(modelContainer: modelContext.container)
         return CarrierInfoViewModel(code: code, service: carrierInfoService, repository: repository)
-
+        
     }
 }
 

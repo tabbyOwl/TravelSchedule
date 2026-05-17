@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum Terms {
+enum Urls {
     static let termsURL = URL(
         string: "https://yandex.ru/legal/timetable_termsofuse/ru/"
     )

@@ -17,7 +17,7 @@ class CitySearchViewModel {
     var searchText: String = ""
     
     // MARK: - Private Properties
-
+    
     private let logger = Logger(label: "CitySearchViewModel")
     private let repository: CitiesWithStationsRepositoryProtocol
     private let stationsListService: StationsListServiceProtocol
@@ -61,7 +61,7 @@ class CitySearchViewModel {
         repository: CitiesWithStationsRepositoryProtocol,
         stationsListService: StationsListServiceProtocol
     ) {
-
+        
         self.repository = repository
         self.stationsListService = stationsListService
     }
@@ -90,7 +90,7 @@ class CitySearchViewModel {
     func fetchAllStations() async {
         
         guard !isLoading else { return }
-            isLoading = true
+        isLoading = true
         defer { isLoading = false }
         
         errorMode = nil
@@ -98,7 +98,7 @@ class CitySearchViewModel {
         do {
             logger.info("Fetching stations...")
             let allStations = try await stationsListService.getAllStations()
-           
+            
             let allSettlements = allStations.countries?
                 .flatMap { $0.regions ?? [] }
                 .flatMap { $0.settlements ?? [] }
@@ -110,16 +110,16 @@ class CitySearchViewModel {
             logger.info("Successfully fetched stations list.")
             
             try await repository.save(filteredSettlements)
-           
+            
             try await updateCitiesFromDatabase()
             
             state = .loaded
         } catch is CancellationError {}
         catch {
-                logger.error("\(error)")
-                state = .failed
-                errorMode = error.asErrorMode
-            }
+            logger.error("\(error)")
+            state = .failed
+            errorMode = error.asErrorMode
+        }
     }
     
     //MARK: - Private methods
@@ -127,23 +127,23 @@ class CitySearchViewModel {
         settlements.compactMap { settlement in
             
             let filteredStations = settlement.stations?.filter(isValidTrainStation) ?? []
-
+            
             guard !filteredStations.isEmpty else {
                 return nil
             }
-
+            
             var newSettlement = settlement
             newSettlement.stations = filteredStations
-
+            
             return newSettlement
         }
     }
     
     private func isValidTrainStation(_ station: Components.Schemas.Station) -> Bool {
         let validTypes = ["train_station", "station"]
-
+        
         return validTypes.contains(station.station_type ?? "")
-            && !(station.direction?.isEmpty ?? true)
+        && !(station.direction?.isEmpty ?? true)
     }
     
     private func updateCitiesFromDatabase() async throws {

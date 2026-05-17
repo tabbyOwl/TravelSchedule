@@ -25,12 +25,12 @@ struct StationSearchListView: View {
     var body: some View {
         List(stations) { station in
             rowButton(text: station.title) {
-                    self.station = station
-                    isDismissing = true
-                    dismiss()
-                }
-            .listRowSeparator(.hidden)
+                self.station = station
+                isDismissing = true
+                dismiss()
             }
+            .listRowSeparator(.hidden)
+        }
         .listStyle(.plain)
     }
     

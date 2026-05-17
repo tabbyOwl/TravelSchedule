@@ -10,12 +10,12 @@ import SwiftUI
 class MainSearchViewModel {
     
     // MARK: - Private Properties
-    private var from: Station = Station(id: "8", title: MainSearchStrings.fromPlaceholder, code: "")
-    private var to: Station = Station(id: "8", title: MainSearchStrings.toPlaceholder, code: "")
+    private var from: Station = Station(id: "8", title: Strings.MainSearch.from, code: "")
+    private var to: Station = Station(id: "8", title: Strings.MainSearch.to, code: "")
     
     // MARK: - Computed Properties
     func isSelected(title: String) -> Bool {
-        title != MainSearchStrings.fromPlaceholder && title != MainSearchStrings.toPlaceholder
+        title != Strings.MainSearch.from && title != Strings.MainSearch.to
     }
     
     var fromStation: Station {
@@ -40,12 +40,12 @@ class MainSearchViewModel {
         let fromTitle = fromStation.title
         let toTitle = toStation.title
         
-        return !fromTitle.isEmpty && !toTitle.isEmpty && fromTitle != MainSearchStrings.fromPlaceholder && toTitle != MainSearchStrings.toPlaceholder
+        return !fromTitle.isEmpty && !toTitle.isEmpty && fromTitle != Strings.MainSearch.from && toTitle != Strings.MainSearch.to
     }
     
     // MARK: - Actions
     func swap() {
-        if from.title != MainSearchStrings.fromPlaceholder && to.title != MainSearchStrings.fromPlaceholder {
+        if from.title != Strings.MainSearch.to && to.title != Strings.MainSearch.from {
             let temp = from
             from = to
             to = temp

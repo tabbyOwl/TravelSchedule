@@ -19,7 +19,7 @@ struct FilterButtonView: View {
     // MARK: - Body
     var body: some View {
         HStack {
-            Text("Уточнить время")
+            Text(Strings.Filters.selectTime)
                 .foregroundStyle(.white)
                 .font(.system(size: 17, weight: .bold))
             

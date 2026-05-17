@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct TermsView: View {
-    private let url = Terms.termsURL
+    private let url = Urls.termsURL
     
     var body: some View {
         Group {
@@ -16,11 +16,11 @@ struct TermsView: View {
                 WebView(url: url)
                     
             } else {
-                Text(TermsViewStrings.invalidUrl)
+                Text(Strings.Terms.invalidUrl)
             }
         }
         .ignoresSafeArea()
-        .navigationTitle(TermsViewStrings.title)
+        .navigationTitle(Strings.Terms.terms)
         .toolbarVisibility(.hidden, for: .tabBar)
         .toolbarBackground(.white, for: .navigationBar)
         

@@ -25,7 +25,7 @@ actor CarrierInfoRepository: CarrierInfoRepositoryProtocol {
         )
         
         let carrierInfo = try modelContext.fetch(descriptor)
-            
+        
         guard let info = carrierInfo.first else {
             return nil
         }
@@ -37,7 +37,7 @@ actor CarrierInfoRepository: CarrierInfoRepositoryProtocol {
     }
     
     func save(for code: String, carrierInfo: Components.Schemas.CarrierResponse) async throws {
-    
+        
         let descriptor = FetchDescriptor<CarrierEntity>(
             predicate: #Predicate { $0.code == code }
         )
@@ -62,10 +62,10 @@ actor CarrierInfoRepository: CarrierInfoRepositoryProtocol {
             
             modelContext.insert(entity)
         }
-            try modelContext.save()
-            logger.info("Successfully saved to swiftData")
-        }
+        try modelContext.save()
+        logger.info("Successfully saved to swiftData")
     }
+}
 
 
 

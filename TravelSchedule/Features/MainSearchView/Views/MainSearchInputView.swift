@@ -36,8 +36,8 @@ struct MainSearchInputView: View {
     
     private var inputRows: some View {
         VStack {
-                InputRowView(station: $viewModel.fromStation, citySearchViewModel: citySearchViewModel)
-                InputRowView(station: $viewModel.toStation, citySearchViewModel: citySearchViewModel)
+            InputRowView(station: $viewModel.fromStation, citySearchViewModel: citySearchViewModel)
+            InputRowView(station: $viewModel.toStation, citySearchViewModel: citySearchViewModel)
         }
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))

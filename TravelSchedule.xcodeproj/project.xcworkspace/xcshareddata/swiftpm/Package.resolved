@@ -1,5 +1,5 @@
 {
-  "originHash" : "bfece5cc0e050063dd3a712be213661f4a7a892ceeb0667d396426e7cfbe9d81",
+  "originHash" : "cc490b02ab5a537aa5a3477263b7553a658d9b0b3eec88000afcbfcb2993a7b3",
   "pins" : [
     {
       "identity" : "keychain-swift",
@@ -105,8 +105,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jpsim/Yams",
       "state" : {
-        "revision" : "deaf82e867fa2cbd3cd865978b079bfcf384ac28",
-        "version" : "6.2.1"
+        "revision" : "3d6871d5b4a5cd519adf233fbb576e0a2af71c17",
+        "version" : "5.4.0"
       }
     }
   ],

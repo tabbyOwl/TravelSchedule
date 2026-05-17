@@ -23,6 +23,6 @@ final class CarrierInfoService: CarrierInfoServiceProtocol {
     }
     
     func getCarrierInfo(code: String) async throws -> CarrierInfo {
-            try await networkClient.getCarrierInfo(code: code)
-        }
+        try await networkClient.getCarrierInfo(code: code)
+    }
 }

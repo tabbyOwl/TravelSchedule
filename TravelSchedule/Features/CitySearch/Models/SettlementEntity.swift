@@ -9,13 +9,13 @@ import SwiftData
 
 @Model
 final class SettlementEntity {
-
+    
     @Attribute(.unique)
     var id: String
     var title: String
     
     var stations: [StationEntity] = []
-
+    
     init(id: String, title: String, stations: [StationEntity]) {
         self.id = id
         self.title = title

@@ -35,7 +35,7 @@ struct ErrorView: View {
     }
     
     init(mode: ErrorMode) {
-            self.mode = mode
+        self.mode = mode
     }
     
     var body: some View {
@@ -50,7 +50,6 @@ struct ErrorView: View {
         }
     }
 }
-
 
 #Preview {
     ErrorView(mode: .serverError)

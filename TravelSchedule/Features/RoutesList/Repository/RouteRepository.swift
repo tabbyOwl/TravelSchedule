@@ -20,12 +20,12 @@ actor RouteRepository: RouteRepositoryProtocol {
     
     func loadSchedule(for routeId: String) throws -> [Segment] {
         let descriptor = FetchDescriptor<RouteEntity>(
-               predicate: #Predicate { $0.id == routeId }
-           )
+            predicate: #Predicate { $0.id == routeId }
+        )
         
-           guard let route = try modelContext.fetch(descriptor).first else {
-               return []
-           }
+        guard let route = try modelContext.fetch(descriptor).first else {
+            return []
+        }
         
         let segments = route.segments.map {
             
@@ -71,13 +71,13 @@ actor RouteRepository: RouteRepositoryProtocol {
             else { continue }
             
             let entity = SegmentEntity(carrierName: carrierName,
-                                 carrierCode: carrierCode,
-                                 logo: segment.thread?.carrier?.logo,
-                                 hasTransfers: segment.has_transfers ?? false,
-                                 departure: departure,
-                                 arrival: arrival,
-                                 duration: duration,
-                                 date: date)
+                                       carrierCode: carrierCode,
+                                       logo: segment.thread?.carrier?.logo,
+                                       hasTransfers: segment.has_transfers ?? false,
+                                       departure: departure,
+                                       arrival: arrival,
+                                       duration: duration,
+                                       date: date)
             for segment in routeEntity.segments {
                 segment.route = routeEntity
             }

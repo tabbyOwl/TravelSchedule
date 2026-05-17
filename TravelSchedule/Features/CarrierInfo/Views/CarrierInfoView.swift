@@ -20,20 +20,24 @@ struct CarrierInfoView: View {
             switch viewModel.state {
             case .loading:
                 ProgressView()
+                
             case .loaded:
                 logo
                 header
-                data(title: CarrierInfoStrings.email, data: viewModel.carrier.email)
-                data(title: CarrierInfoStrings.phone, data: viewModel.carrier.phone)
-                
+                data(title: Strings.CarrierInfo.email, data: viewModel.carrier.email)
+                data(title: Strings.CarrierInfo.phone, data: viewModel.carrier.phone)
                 Spacer()
+                
             case .failed:
-                EmptyView()
+                if let errorMode = viewModel.errorMode {
+                    ErrorView(mode: errorMode)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
             }
         }
-        
         .padding(.leading, 16)
-        .navigationTitle(CarrierInfoStrings.title)
+        .padding(.trailing, 16)
+        .navigationTitle(Strings.CarrierInfo.title)
         .task {
             await viewModel.loadCarrierInfo()
         }
@@ -44,7 +48,6 @@ struct CarrierInfoView: View {
 private extension CarrierInfoView {
     var logo: some View {
         LogoImageView(url: viewModel.carrier.logo)
-            
             .frame(width: CarrierInfoLayout.imageWidth, height: CarrierInfoLayout.imageHeight)
             .scaledToFit()
             .background(.white)

@@ -9,22 +9,22 @@ import OpenAPIRuntime
 import Foundation
 
 extension Error {
-
+    
     var asErrorMode: ErrorMode {
-
+        
         guard
             let clientError = self as? ClientError,
             let urlError = clientError.underlyingError as? URLError
         else {
             return .serverError
         }
-
+        
         switch urlError.code {
-
+            
         case .notConnectedToInternet,
-             .networkConnectionLost:
+                .networkConnectionLost:
             return .noInternet
-
+            
         default:
             return .serverError
         }

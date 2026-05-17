@@ -12,11 +12,11 @@ private struct ImageDownloaderKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-
+    
     var imageDownloader: ImageDownloader {
-
+        
         get { self[ImageDownloaderKey.self] }
-
+        
         set { self[ImageDownloaderKey.self] = newValue }
     }
 }

@@ -4,9 +4,7 @@
 //
 //  Created by Svetlana on 2026/4/16.
 //
-
 import SwiftUI
-import SwiftData
 
 struct CitySearchView: View {
     
@@ -30,33 +28,33 @@ struct CitySearchView: View {
     // MARK: - Body
     var body: some View {
         
-        ZStack {
+        Group {
             switch viewModel.state {
+                
             case .loading:
-                ProgressView("Идет загрузка...")
+                ProgressView(Strings.Common.loading)
             case .failed:
                 if let errorMode = viewModel.errorMode {
                     ErrorView(mode: errorMode)
                 }
             case .loaded:
-                Group {
-                    if viewModel.hasNoResults {
-                        NoDataView(text: "Город не найден")
-                    } else {
-                        CitySearchListView(station: $station,
-                                           isDismissing: $isDismissing,
-                                           cities: viewModel.filteredCities)
-                    }
+                if viewModel.hasNoResults {
+                    NoDataView(text: Strings.CitySearch.cityNotFound)
+                } else {
+                    CitySearchListView(station: $station,
+                                       isDismissing: $isDismissing,
+                                       cities: viewModel.filteredCities)
                 }
-                
             }
         }
+        
         
         .searchable(
             text: $viewModel.searchText,
             placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Введите запрос"
+            prompt: Strings.Common.enterSearchText
         )
+        
         .toolbarVisibility(.hidden, for: .tabBar)
         
         .task {
@@ -69,6 +67,7 @@ struct CitySearchView: View {
         }
     }
 }
+
 
 
 #Preview {

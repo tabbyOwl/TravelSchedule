@@ -5,7 +5,6 @@
 //  Created by Svetlana on 2026/4/18.
 //
 
-import SwiftData
 import SwiftUI
 
 struct CitySearchListView: View {
@@ -16,7 +15,7 @@ struct CitySearchListView: View {
     
     // MARK: - Private Properties
     private var cities: [Settlement]
-   
+    
     // MARK: - Init
     init(station: Binding<Station>, isDismissing: Binding<Bool>, cities: [Settlement]) {
         _station = station
@@ -39,7 +38,7 @@ struct CitySearchListView: View {
             .tint(.black)
         }
         .listStyle(.plain)
-        .navigationTitle("Выбор города")
+        .navigationTitle(Strings.CitySearch.citySelection)
     }
 }
 

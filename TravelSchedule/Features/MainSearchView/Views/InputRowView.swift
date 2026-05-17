@@ -22,7 +22,7 @@ struct InputRowView: View {
     // MARK: - Body
     var body: some View {
         let title = station.title
-        let isSelected = title != MainSearchStrings.fromPlaceholder && title != MainSearchStrings.toPlaceholder
+        let isSelected = title != Strings.MainSearch.from && title != Strings.MainSearch.to
         
         NavigationLink(destination: CitySearchView(station: $station,
                                                    viewModel: citySearchViewModel)) {

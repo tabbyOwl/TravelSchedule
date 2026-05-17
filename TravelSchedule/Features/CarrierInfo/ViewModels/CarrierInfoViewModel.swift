@@ -31,7 +31,7 @@ final class CarrierInfoViewModel {
     //MARK: - Public methods
     func loadCarrierInfo() async {
         do {
-           try await updateCarrierInfoFromDataBase()
+            try await updateCarrierInfoFromDataBase()
             
             if state != .loading {
                 return

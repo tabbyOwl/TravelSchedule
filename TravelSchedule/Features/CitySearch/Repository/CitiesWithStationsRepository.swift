@@ -78,53 +78,53 @@ actor CitiesWithStationsRepository: CitiesWithStationsRepositoryProtocol {
     }
     
     func save(_ settlements: [Components.Schemas.Settlement]) throws {
-
+        
         logger.info("Saving to swiftData...")
-
+        
         for settlement in settlements {
-
+            
             guard let id = settlement.codes?.yandex_code,
                   let title = settlement.title
             else {
                 continue
             }
-
+            
             let descriptor = FetchDescriptor<SettlementEntity>(
                 predicate: #Predicate { $0.id == id }
             )
-
+            
             let entity: SettlementEntity
-
+            
             if let existing = try modelContext.fetch(descriptor).first {
-
+                
                 entity = existing
                 entity.title = title
                 entity.stations.removeAll()
-
+                
             } else {
-
+                
                 entity = SettlementEntity(
                     id: id,
                     title: title,
                     stations: []
                 )
-
+                
                 modelContext.insert(entity)
             }
-
+            
             let stationsDTO = settlement.stations ?? []
             
             for dto in stationsDTO {
                 guard let station = StationEntity(from: dto) else {
                     continue
                 }
-
+                
                 entity.stations.append(station)
             }
         }
-
+        
         try modelContext.save()
-
+        
         logger.info("Successfully saved to swiftData")
     }
     

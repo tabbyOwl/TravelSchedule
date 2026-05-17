@@ -8,17 +8,17 @@
 final class MockServiceFactory: ServiceFactoryProtocol {
     
     lazy var scheduleService:
-        any ScheduleBetweenStationsProtocol = {
-            MockScheduleService()
-        }()
+    any ScheduleBetweenStationsProtocol = {
+        MockScheduleService()
+    }()
     
     lazy var stationsService:
-        any StationsListServiceProtocol = {
-            MockStationsListService()
-        }()
+    any StationsListServiceProtocol = {
+        MockStationsListService()
+    }()
     
     lazy var carrierInfoService:
-        any CarrierInfoServiceProtocol = {
-            MockCarrierInfoService()
-        }()
+    any CarrierInfoServiceProtocol = {
+        MockCarrierInfoService()
+    }()
 }

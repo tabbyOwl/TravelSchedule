@@ -9,7 +9,7 @@ import SwiftData
 
 @Model
 final class StationEntity {
-
+    
     @Attribute(.unique)
     var code: String
     
@@ -22,13 +22,13 @@ final class StationEntity {
 }
 
 extension StationEntity {
-
+    
     convenience init?(from dto: Components.Schemas.Station) {
-
+        
         guard let code = dto.codes?.yandex_code,
               let title = dto.title
         else { return nil }
-
+        
         self.init(code: code,title: title)
     }
 }

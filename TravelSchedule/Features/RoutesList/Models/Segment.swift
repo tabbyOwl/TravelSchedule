@@ -16,6 +16,9 @@ struct Segment: Identifiable, Sendable {
     let arrival: String
     let duration: Int
     let date: String
+}
+
+extension Segment {
     
     var formattedDuration: String {
         let totalHours = duration / 3600
@@ -26,7 +29,20 @@ struct Segment: Identifiable, Sendable {
         if days > 0 {
             return "\(days) д \(hours) ч"
         } else {
-            return "\(hours) часов"
+            return Strings.hours(hours)
         }
     }
+    
+    var formattedDate: String {
+        date.formattedRussianDate()
+    }
+    
+    var departureDate: Date {
+        let dateString = "\(date) \(departure)"
+        
+        return DateFormatter.departureDateFormatter.date(
+            from: dateString
+        ) ?? .distantPast
+    }
 }
+

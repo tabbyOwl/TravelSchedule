@@ -63,7 +63,7 @@ private extension RouteListView {
         case .loaded:
             ZStack(alignment: .bottom) {
                 if viewModel.filteredSegments.isEmpty {
-                    NoDataView(text: "Вариантов нет")
+                    NoDataView(text: Strings.RouteSearch.routesNotFound)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     
@@ -76,8 +76,6 @@ private extension RouteListView {
                 FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
                                      showTransfers: $viewModel.showTransfers,
                                      isFiltersOn: viewModel.isFiltersOn)
-                
-                
             }
         }
     }

@@ -9,10 +9,10 @@ import SwiftUI
 
 struct TabBarView: View {
     
-    private let factory: ServiceFactory
+    private let factory: ServiceFactoryProtocol
     private let viewModel: MainSearchViewModel
     
-    init(factory: ServiceFactory, viewModel: MainSearchViewModel) {
+    init(factory: ServiceFactoryProtocol, viewModel: MainSearchViewModel) {
         self.factory = factory
         self.viewModel = viewModel
     }
@@ -34,8 +34,8 @@ struct TabBarView: View {
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TabBarView(factory: ServiceFactory())
-//    }
-//}
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        TabBarView(factory: MockServiceFactory(), viewModel: MainSearchViewModel())
+    }
+}

@@ -13,11 +13,11 @@ final class APIKeyManager {
     func saveApiKey(_ apiKey: String) {
         keychain.set(apiKey, forKey: "API_KEY")
     }
-
+    
     func getApiKey() -> String? {
         return keychain.get("API_KEY")
     }
-
+    
     func deleteApiKey() {
         keychain.delete("API_KEY")
     }

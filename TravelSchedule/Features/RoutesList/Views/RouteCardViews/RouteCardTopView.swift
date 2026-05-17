@@ -26,16 +26,16 @@ struct RouteCardTopView: View {
     var body: some View {
         HStack(alignment: .top) {
             LogoImageView(url: logo)
-                          .frame(width: 38, height: 38)
-                          .background(.white)
-                          .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(width: 38, height: 38)
+                .background(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(carrierName)
                     .font(.system(size: 17, weight: .regular))
                     .lineLimit(1)
-                    
-                Text(hasTransfers ? "С пересадкой" : "")
+                
+                Text(hasTransfers ? Strings.RouteSearch.transfer : "")
                     .foregroundStyle(.redUniversal)
                     .font(.system(size: 12, weight: .regular))
             }

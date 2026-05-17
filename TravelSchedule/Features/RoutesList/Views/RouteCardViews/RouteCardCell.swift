@@ -21,7 +21,7 @@ struct RouteCardCell: View {
         VStack {
             RouteCardTopView(carrierName: segment.carrierName,
                              hasTransfers: segment.hasTransfers,
-                             date: segment.date,
+                             date: segment.formattedDate,
                              logo: segment.logo)
             
             RouteCardBottomView(departure: segment.departure,

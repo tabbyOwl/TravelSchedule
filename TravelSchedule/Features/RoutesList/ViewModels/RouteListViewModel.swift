@@ -32,7 +32,7 @@ class RouteListViewModel {
     }
     // MARK: - Computed Properties
     var filteredSegments: [Segment] {
-        selectedIntervals.isEmpty ? segments :
+        let filtered = selectedIntervals.isEmpty ? segments :
         segments.filter { segment in
             guard let time = getMinutes(from: segment.departure) else { return false }
             
@@ -49,7 +49,9 @@ class RouteListViewModel {
                 return false
             }
         }
-        .sorted { $0.date < $1.date }
+        return filtered.sorted {
+            return $0.departureDate < $1.departureDate
+        }
     }
     
     var isFiltersOn: Bool {
