@@ -15,7 +15,7 @@ final class StoryStackCellViewModel {
     //MARK: - Init
     init(preview: String, title: String?, isViewed: Bool) {
         self._preview = preview
-        self._title = text
+        self._title = title
         self._isViewed = isViewed
     }
     
