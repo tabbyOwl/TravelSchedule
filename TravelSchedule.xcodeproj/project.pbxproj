@@ -22,17 +22,29 @@
 		3FF9A50D2FB965380087A147 /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Configuration/Config.xcconfig,
 				Info.plist,
 			);
 			target = 3F8C73F52F79525C00C79AEF /* TravelSchedule */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		3FE8DC152FBB17BA00027C8B /* Exceptions for "TravelSchedule" folder in "Compile Sources" phase from "TravelSchedule" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 3F8C73F22F79525C00C79AEF /* Sources */;
+			membershipExceptions = (
+				Configuration/Config.xcconfig,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3F8C73F82F79525C00C79AEF /* TravelSchedule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				3FF9A50D2FB965380087A147 /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */,
+				3FE8DC152FBB17BA00027C8B /* Exceptions for "TravelSchedule" folder in "Compile Sources" phase from "TravelSchedule" target */,
 			);
 			path = TravelSchedule;
 			sourceTree = "<group>";
