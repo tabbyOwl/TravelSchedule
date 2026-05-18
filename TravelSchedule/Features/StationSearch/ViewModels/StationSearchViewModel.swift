@@ -9,28 +9,19 @@ import Foundation
 @Observable
 class StationSearchViewModel {
     
-    private var city: Settlement
-    private var _isLoading: Bool = false
-    private var _searchText: String = ""
+    var searchText: String = ""
+    private var stations: [Station]
+    private(set) var isLoading: Bool = false
     
-    init(city: Settlement) {
-        self.city = city
-    }
-    
-    var searchText: String {
-        get { _searchText }
-        set { _searchText = newValue }
-    }
-    
-    var isLoading: Bool {
-        _isLoading
+    init(stations: [Station]) {
+        self.stations = stations
     }
     
     var hasNoResults: Bool {
-        !_searchText.isEmpty && filteredStations.isEmpty
+        !searchText.isEmpty && filteredStations.isEmpty
     }
     
     var filteredStations: [Station] {
-        _searchText.isEmpty ? city.stations : city.stations.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
+        return searchText.isEmpty ? stations : stations.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
     }
 }

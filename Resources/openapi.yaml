@@ -564,6 +564,12 @@ components:
         duration:
           type: integer
           description: Длительность рейса в секундах
+        has_transfers:
+          type: boolean
+          description: Признак наличия пересадок по ходу рейса.
+        start_date:
+          type: string
+          description: Дата отправления рейса
     Pagination:
       type: object
       properties:

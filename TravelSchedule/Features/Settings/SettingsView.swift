@@ -13,13 +13,13 @@ struct SettingsView: View {
     var body: some View {
         
         NavigationStack {
-            Toggle("Темная тема", isOn: $isDarkMode)
+            Toggle(Strings.Settings.darkMode, isOn: $isDarkMode)
                 .tint(.blueUniversal)
                 .frame(width: 375, height: 60)
-               
+            
             NavigationLink(destination: TermsView()) {
                 HStack {
-                    Text(TermsViewStrings.title)
+                    Text(Strings.Terms.terms)
                     Spacer()
                     Image(systemName: SystemIcons.chevronRight)
                 }
@@ -28,8 +28,8 @@ struct SettingsView: View {
             Spacer()
             
             VStack(spacing: 16) {
-                Text("Приложение использует API «Яндекс.Расписания»")
-                Text("Версия 1.0 (beta)")
+                Text(Strings.Settings.appUsesYandexAPI)
+                Text(Strings.Settings.version)
             }
             .padding(.bottom, 24)
             .font(.system(size: 12))

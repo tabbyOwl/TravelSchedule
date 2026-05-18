@@ -5,22 +5,27 @@
 //  Created by Svetlana on 2026/4/16.
 //
 import SwiftUI
+import SwiftData
 
 struct InputRowView: View {
+    
     // MARK: - Bindings
     @Binding var station: Station
     
+    let citySearchViewModel: CitySearchViewModel
     // MARK: - Init
-    init(station: Binding<Station>) {
+    init(station: Binding<Station>, citySearchViewModel: CitySearchViewModel) {
         _station = station
+        self.citySearchViewModel = citySearchViewModel
     }
     
     // MARK: - Body
     var body: some View {
         let title = station.title
-        let isSelected = title != Strings.fromPlaceholder && title != Strings.toPlaceholder
+        let isSelected = title != Strings.MainSearch.from && title != Strings.MainSearch.to
         
-        NavigationLink(destination: CitySearchView(station: $station, viewModel: CitySearchViewModel())) {
+        NavigationLink(destination: CitySearchView(station: $station,
+                                                   viewModel: citySearchViewModel)) {
             rowView(title: title, isSelected: isSelected)
         }
     }

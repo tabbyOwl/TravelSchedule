@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct TabBarView: View {
+    
+    private let factory: ServiceFactoryProtocol
+    private let viewModel: MainSearchViewModel
+    
+    init(factory: ServiceFactoryProtocol, viewModel: MainSearchViewModel) {
+        self.factory = factory
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         NavigationStack {
             TabView {
                 Tab("", systemImage: SystemIcons.arrowUp) {
-                    MainSearchView(viewModel: MainSearchViewModel())
+                    
+                    let viewModel = MainSearchViewModel()
+                    MainSearchView(viewModel: viewModel, factory: factory)
                 }
                 
                 Tab("", systemImage: SystemIcons.gearshape) {
@@ -25,6 +36,6 @@ struct TabBarView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        TabBarView()
+        TabBarView(factory: MockServiceFactory(), viewModel: MainSearchViewModel())
     }
 }

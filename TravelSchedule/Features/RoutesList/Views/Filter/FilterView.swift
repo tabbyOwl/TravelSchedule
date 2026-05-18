@@ -42,7 +42,7 @@ struct FilterView: View {
     // MARK: - Views
     private var timeSection: some View {
         VStack(alignment: .leading) {
-            Text("Время отправления")
+            Text(Strings.Filters.departureTime)
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
                 .font(.system(size: 24, weight: .bold))
@@ -55,17 +55,17 @@ struct FilterView: View {
     
     private var transfersSection: some View {
         VStack(alignment: .leading) {
-            Text("Показывать варианты с пересадками")
+            Text(Strings.Filters.showOptionsWithTransfers)
                 .padding(.horizontal, 16)
                 .font(.system(size: 24, weight: .bold))
             
-            transferRow(title: "Да", isSelected: showTransfers)
-            transferRow(title: "Нет", isSelected: !showTransfers)
+            transferRow(title: Strings.Filters.yes, isSelected: showTransfers)
+            transferRow(title: Strings.Filters.no, isSelected: !showTransfers)
         }
     }
     
     private var applyButton: some View {
-        Button("Применить фильтры") {
+        Button(Strings.Filters.applyFilters) {
             dismiss()
         }
         .frame(maxWidth: .infinity)
@@ -85,7 +85,7 @@ struct FilterView: View {
         return HStack {
             Text(interval.displayName)
             Spacer()
-            Image(systemName: isSelected ? "checkmark.square.fill" : "square")
+            Image(systemName: isSelected ? SystemIcons.checkmarkSquareFill : SystemIcons.square)
         }
         .padding()
         .contentShape(Rectangle())
@@ -98,7 +98,7 @@ struct FilterView: View {
         HStack {
             Text(title)
             Spacer()
-            Image(systemName: isSelected ? "circle.circle.fill" : "circle")
+            Image(systemName: isSelected ? SystemIcons.circleCircleFill : SystemIcons.circle)
         }
         .padding()
         .onTapGesture {

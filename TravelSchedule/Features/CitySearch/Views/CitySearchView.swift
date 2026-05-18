@@ -4,7 +4,6 @@
 //
 //  Created by Svetlana on 2026/4/16.
 //
-
 import SwiftUI
 
 struct CitySearchView: View {
@@ -22,36 +21,57 @@ struct CitySearchView: View {
     // MARK: - Init
     init(station: Binding<Station>, viewModel: CitySearchViewModel) {
         _station = station
-        self.viewModel = viewModel
+        _viewModel = State(initialValue: viewModel)
     }
+    
     
     // MARK: - Body
     var body: some View {
-        content
-            .searchable(text: $viewModel.searchText,
-                        placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Введите запрос")
-
-            .onAppear {
-                if isDismissing {
-                    dismiss()
+        
+        Group {
+            switch viewModel.state {
+                
+            case .loading:
+                ProgressView(Strings.Common.loading)
+            case .failed:
+                if let errorMode = viewModel.errorMode {
+                    ErrorView(mode: errorMode)
                 }
-                viewModel.loadCities()
+            case .loaded:
+                if viewModel.hasNoResults {
+                    NoDataView(text: Strings.CitySearch.cityNotFound)
+                } else {
+                    CitySearchListView(station: $station,
+                                       isDismissing: $isDismissing,
+                                       cities: viewModel.filteredCities)
+                }
             }
-            .toolbarVisibility(.hidden, for: .tabBar)
-    }
-    
-    // MARK: - Content
-    @ViewBuilder
-    private var content: some View {
-        if viewModel.hasNoResults {
-            NoDataView(text: "Город не найден")
-        } else {
-            CitySearchListView(station: $station, isDismissing: $isDismissing, cities: viewModel.filteredCities)
+        }
+        
+        
+        .searchable(
+            text: $viewModel.searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: Strings.Common.enterSearchText
+        )
+        
+        .toolbarVisibility(.hidden, for: .tabBar)
+        
+        .task {
+            await viewModel.loadCities()
+        }
+        .onChange(of: isDismissing) { _, newValue in
+            if newValue {
+                dismiss()
+            }
         }
     }
 }
 
+
+
 #Preview {
-    CitySearchView(station: .constant(Station(title: "", code: "", type: "")), viewModel: CitySearchViewModel())
+    CitySearchView(station: .constant(mockStations[0]),
+                   viewModel: CitySearchViewModel(repository: MockCitiesWithStationsRepository(),
+                                                  stationsListService: MockStationsListService()))
 }

@@ -15,24 +15,39 @@ struct CarrierInfoView: View {
     }
     
     var body: some View {
-        
         VStack(alignment: .leading) {
-            logo
-            header
-            data(title: CarrierInfoStrings.email, data: viewModel.carrier.email)
-            data(title: CarrierInfoStrings.phone, data: viewModel.carrier.phone)
-            Spacer()
+            
+            switch viewModel.state {
+            case .loading:
+                ProgressView()
+                
+            case .loaded:
+                logo
+                header
+                data(title: Strings.CarrierInfo.email, data: viewModel.carrier.email)
+                data(title: Strings.CarrierInfo.phone, data: viewModel.carrier.phone)
+                Spacer()
+                
+            case .failed:
+                if let errorMode = viewModel.errorMode {
+                    ErrorView(mode: errorMode)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
         }
         .padding(.leading, 16)
-        .navigationTitle(CarrierInfoStrings.title)
+        .padding(.trailing, 16)
+        .navigationTitle(Strings.CarrierInfo.title)
+        .task {
+            await viewModel.loadCarrierInfo()
+        }
     }
 }
 
+
 private extension CarrierInfoView {
     var logo: some View {
-        Image(.carrierLogo)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
+        LogoImageView(url: viewModel.carrier.logo)
             .frame(width: CarrierInfoLayout.imageWidth, height: CarrierInfoLayout.imageHeight)
             .scaledToFit()
             .background(.white)
@@ -51,16 +66,25 @@ private extension CarrierInfoView {
 }
 
 private extension CarrierInfoView {
-    func data(title: String, data: String) -> some View {
+    func data(title: String, data: String?) -> some View {
         return VStack(alignment: .leading) {
-            Text(title)
-            Text(data)
-                .foregroundStyle(.blueUniversal)
+            if let data = data, !data.isEmpty {
+                Text(title)
+                Text(data)
+                    .foregroundStyle(.blueUniversal)
+            }
         }
         .padding(.bottom)
     }
 }
 
+
 #Preview {
-    CarrierInfoView(viewModel: CarrierInfoViewModel(carrier: mockCarrier))
+    CarrierInfoView(
+        viewModel: CarrierInfoViewModel(
+            code: "SU",
+            service: MockCarrierInfoService(),
+            repository: MockCarrierInfoRepository()
+        )
+    )
 }

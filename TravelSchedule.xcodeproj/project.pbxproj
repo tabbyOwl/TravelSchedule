@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F7FA68F2FA6013A00BF985E /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3F7FA68E2FA6013A00BF985E /* KeychainSwift */; };
+		3F7FA69E2FA6077300BF985E /* InMemoryLogging in Frameworks */ = {isa = PBXBuildFile; productRef = 3F7FA69D2FA6077300BF985E /* InMemoryLogging */; };
+		3F7FA6A02FA6077300BF985E /* Logging in Frameworks */ = {isa = PBXBuildFile; productRef = 3F7FA69F2FA6077300BF985E /* Logging */; };
 		3F8C74112F7958B100C79AEF /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 3F8C74102F7958B100C79AEF /* OpenAPIRuntime */; };
 		3F8C74142F7958D700C79AEF /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = 3F8C74132F7958D700C79AEF /* OpenAPIURLSession */; };
 /* End PBXBuildFile section */
@@ -15,9 +18,22 @@
 		3F8C73F62F79525C00C79AEF /* TravelSchedule.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelSchedule.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3FF9A50D2FB965380087A147 /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3F8C73F52F79525C00C79AEF /* TravelSchedule */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3F8C73F82F79525C00C79AEF /* TravelSchedule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				3FF9A50D2FB965380087A147 /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */,
+			);
 			path = TravelSchedule;
 			sourceTree = "<group>";
 		};
@@ -33,8 +49,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F7FA68F2FA6013A00BF985E /* KeychainSwift in Frameworks */,
 				3F8C74142F7958D700C79AEF /* OpenAPIURLSession in Frameworks */,
+				3F7FA69E2FA6077300BF985E /* InMemoryLogging in Frameworks */,
 				3F8C74112F7958B100C79AEF /* OpenAPIRuntime in Frameworks */,
+				3F7FA6A02FA6077300BF985E /* Logging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +101,9 @@
 			packageProductDependencies = (
 				3F8C74102F7958B100C79AEF /* OpenAPIRuntime */,
 				3F8C74132F7958D700C79AEF /* OpenAPIURLSession */,
+				3F7FA68E2FA6013A00BF985E /* KeychainSwift */,
+				3F7FA69D2FA6077300BF985E /* InMemoryLogging */,
+				3F7FA69F2FA6077300BF985E /* Logging */,
 			);
 			productName = TravelSchedule;
 			productReference = 3F8C73F62F79525C00C79AEF /* TravelSchedule.app */;
@@ -103,11 +125,12 @@
 				};
 			};
 			buildConfigurationList = 3F8C73F12F79525C00C79AEF /* Build configuration list for PBXProject "TravelSchedule" */;
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 3F8C73ED2F79525C00C79AEF;
 			minimizedProjectReferenceProxies = 1;
@@ -115,6 +138,8 @@
 				3F8C740F2F7958B100C79AEF /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
 				3F8C74122F7958D700C79AEF /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 				3F8C74152F7958F600C79AEF /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
+				3F7FA68D2FA6013A00BF985E /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				3F7FA69C2FA6077300BF985E /* XCRemoteSwiftPackageReference "swift-log" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3F8C73F72F79525C00C79AEF /* Products */;
@@ -213,6 +238,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -269,6 +295,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -283,7 +310,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KZ68ANWW86;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TravelSchedule/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -301,6 +330,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -317,7 +347,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = KZ68ANWW86;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TravelSchedule/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -335,6 +367,7 @@
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -365,6 +398,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3F7FA68D2FA6013A00BF985E /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.0.0;
+			};
+		};
+		3F7FA69C2FA6077300BF985E /* XCRemoteSwiftPackageReference "swift-log" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-log";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.12.0;
+			};
+		};
 		3F8C740F2F7958B100C79AEF /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/apple/swift-openapi-runtime";
@@ -392,6 +441,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3F7FA68E2FA6013A00BF985E /* KeychainSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F7FA68D2FA6013A00BF985E /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			productName = KeychainSwift;
+		};
+		3F7FA69D2FA6077300BF985E /* InMemoryLogging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F7FA69C2FA6077300BF985E /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = InMemoryLogging;
+		};
+		3F7FA69F2FA6077300BF985E /* Logging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3F7FA69C2FA6077300BF985E /* XCRemoteSwiftPackageReference "swift-log" */;
+			productName = Logging;
+		};
 		3F8C74102F7958B100C79AEF /* OpenAPIRuntime */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3F8C740F2F7958B100C79AEF /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */;

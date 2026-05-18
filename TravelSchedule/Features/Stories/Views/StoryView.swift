@@ -49,5 +49,5 @@ struct StoryView: View {
 }
 
 #Preview {
-    StoryView(story: mockStoryGroups[5].stories[1])
+    StoryView(story: mockStoryGroups[0].stories[0])
 }

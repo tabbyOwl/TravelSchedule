@@ -25,17 +25,17 @@ struct FilterNavigationView: View {
     
     // MARK: - Body
     var body: some View {
-            NavigationLink(
-                destination: FilterView(
-                    selectedIntervals: $selectedIntervals,
-                    showTransfers: $showTransfers
-                )
-            ) {
-                FilterButtonView(isFiltersOn: isFiltersOn)
-                    .padding()
-            }
+        NavigationLink(
+            destination: FilterView(
+                selectedIntervals: $selectedIntervals,
+                showTransfers: $showTransfers
+            )
+        ) {
+            FilterButtonView(isFiltersOn: isFiltersOn)
+                .padding()
         }
     }
+}
 
 
 #Preview {

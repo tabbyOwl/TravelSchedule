@@ -39,5 +39,6 @@ struct MainStoriesView: View {
 }
 
 #Preview {
-    MainStoriesView(stories: mockStoryGroups[0].stories, isPresented: .constant(true))
+    MainStoriesView(stories: mockStoryGroups[0].stories,
+                    isPresented: .constant(true))
 }

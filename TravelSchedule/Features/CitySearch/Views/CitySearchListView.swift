@@ -15,7 +15,7 @@ struct CitySearchListView: View {
     
     // MARK: - Private Properties
     private var cities: [Settlement]
-   
+    
     // MARK: - Init
     init(station: Binding<Station>, isDismissing: Binding<Bool>, cities: [Settlement]) {
         _station = station
@@ -26,7 +26,7 @@ struct CitySearchListView: View {
     // MARK: - Body
     var body: some View {
         List(cities) { city in
-            NavigationLink { StationSearchView(station: $station, isDismissing: $isDismissing, viewModel: StationSearchViewModel(city: city)) } label: {
+            NavigationLink { StationSearchView(station: $station, isDismissing: $isDismissing, viewModel: StationSearchViewModel(stations: city.stations)) } label: {
                 HStack {
                     Text(city.title)
                     Spacer()
@@ -38,10 +38,14 @@ struct CitySearchListView: View {
             .tint(.black)
         }
         .listStyle(.plain)
-        .navigationTitle("Выбор города")
+        .navigationTitle(Strings.CitySearch.citySelection)
     }
 }
 
 #Preview {
-    CitySearchView(station: .constant(Station(title: "", code: "", type: "")), viewModel: CitySearchViewModel())
+    NavigationStack {
+        CitySearchListView(station: .constant(mockStations[0]),
+                           isDismissing: .constant(false),
+                           cities: mockCitiesList)
+    }
 }

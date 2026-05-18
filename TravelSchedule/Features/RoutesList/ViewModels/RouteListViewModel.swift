@@ -5,24 +5,38 @@
 //  Created by Svetlana on 2026/4/16.
 //
 import Foundation
+import Logging
+import OpenAPIRuntime
 
+@MainActor
 @Observable
 class RouteListViewModel {
     
+    var segments: [Segment] = []
+    var selectedIntervals: Set<ScheduleInterval> = []
+    var showTransfers = true
+    var imageLoader = ImageDownloader()
+    
     // MARK: - Private Properties
+    private let logger = Logger(label: "RouteListViewModel")
     private let from: Station
     private let to: Station
-    private var segments: [Segment] = mockSegments
-    private var _selectedIntervals: Set<ScheduleInterval> = []
-    private var _showTransfers = true
- 
+    private let scheduleService: ScheduleBetweenStationsProtocol
+    private let repository: RouteRepositoryProtocol
+    private(set) var state: ViewState = .loaded
+    private(set) var errorMode: ErrorMode?
+    private var isLoading = false
+    
+    private var routeId: String {
+        "\(from.code)-\(to.code)"
+    }
     // MARK: - Computed Properties
     var filteredSegments: [Segment] {
-        _selectedIntervals.isEmpty ? segments :
+        let filtered = selectedIntervals.isEmpty ? segments :
         segments.filter { segment in
             guard let time = getMinutes(from: segment.departure) else { return false }
             
-            return _selectedIntervals.contains { interval in
+            return selectedIntervals.contains { interval in
                 if let startTime = getMinutes(from: interval.startTime),
                    let endTime = getMinutes(from: interval.endTime) {
                     
@@ -35,29 +49,13 @@ class RouteListViewModel {
                 return false
             }
         }
-        .sorted { $0.date < $1.date }
-    }
-    
-    var showTransfers: Bool {
-        get {_showTransfers }
-        set {
-            if newValue != _showTransfers {
-                _showTransfers = newValue
-            }
-        }
-    }
-    
-    var selectedIntervals: Set<ScheduleInterval>  {
-        get { _selectedIntervals }
-        set {
-            if newValue != _selectedIntervals {
-                _selectedIntervals = newValue
-            }
+        return filtered.sorted {
+            return $0.departureDate < $1.departureDate
         }
     }
     
     var isFiltersOn: Bool {
-        _selectedIntervals.isEmpty ? false : true
+        selectedIntervals.isEmpty ? false : true
     }
     
     var routeTitle: String {
@@ -65,12 +63,35 @@ class RouteListViewModel {
     }
     
     // MARK: - Init
-    init(from: Station, to: Station) {
+    init(from: Station, to: Station, scheduleService: ScheduleBetweenStationsProtocol, repository: RouteRepositoryProtocol) {
         self.from = from
         self.to = to
+        self.scheduleService = scheduleService
+        self.repository = repository
+    }
+    
+    // MARK: - Public Methods
+    
+    func loadSchedule() async {
+        do {
+            try await updateSegmentsFromDatabase()
+            
+            if !segments.isEmpty {
+                logger.info("Loaded from database")
+                return
+            }
+        } catch {
+            logger.error("Data base error: \(error)")
+        }
+        await fetchSchedule()
+    }
+    
+    func refreshSchedule() async {
+        await fetchSchedule()
     }
     
     // MARK: - Private Methods
+    ///число минут от начала суток
     private func getMinutes(from time: String) -> Int? {
         let components = time.split(separator: ":")
         guard
@@ -78,5 +99,36 @@ class RouteListViewModel {
             let minutes = Int(components[1]) else { return nil }
         
         return hours * 60 + minutes
+    }
+    
+    private func fetchSchedule() async {
+        
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        
+        state = .loading
+        do {
+            logger.info("Fetching schedule...")
+            let schedule = try await scheduleService.getScheduleBetweenStations(from: from.code, to: to.code)
+            
+            guard let fetchedSegments = schedule.segments else { return }
+            
+            try await repository.saveSchedule(for: routeId, segments: fetchedSegments)
+            
+            try await updateSegmentsFromDatabase()
+            
+            logger.info(" Successfully fetched schedule...")
+            state = .loaded
+        } catch {
+            logger.error("\(error)")
+            state = .failed
+            errorMode = error.asErrorMode
+        }
+    }
+    
+    private func updateSegmentsFromDatabase() async throws {
+        let data = try await repository.loadSchedule(for: routeId)
+        self.segments = data
     }
 }

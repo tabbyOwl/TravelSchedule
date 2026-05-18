@@ -6,9 +6,8 @@
 //
 import Foundation
 
-struct Station: Identifiable {
-    let id = UUID()
+struct Station: Identifiable, Codable, Sendable {
+    let id: String
     let title: String
     let code: String
-    let type: String
 }

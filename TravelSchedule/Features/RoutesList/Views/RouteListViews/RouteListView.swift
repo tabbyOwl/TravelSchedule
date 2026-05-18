@@ -11,10 +11,12 @@ struct RouteListView: View {
     
     // MARK: - State
     @State private var viewModel: RouteListViewModel
+    private let carrierInfoService: CarrierInfoServiceProtocol
     
     // MARK: - Init
-    init(viewModel: RouteListViewModel) {
-        self.viewModel = viewModel
+    init(viewModel: RouteListViewModel, carrierInfoService: CarrierInfoServiceProtocol) {
+        _viewModel = State(initialValue: viewModel)
+        self.carrierInfoService = carrierInfoService
     }
     
     // MARK: - Body
@@ -23,9 +25,16 @@ struct RouteListView: View {
             header
             content
                 .toolbarVisibility(.hidden, for: .tabBar)
+                .task {
+                    await viewModel.loadSchedule()
+                }
+                .refreshable {
+                    await viewModel.refreshSchedule()
+                }
         }
     }
 }
+
 // MARK: - Header
 private extension RouteListView {
     var header: some View {
@@ -39,28 +48,44 @@ private extension RouteListView {
 private extension RouteListView {
     @ViewBuilder
     var content: some View {
-        if viewModel.filteredSegments.isEmpty {
-            VStack{
-                Spacer()
-                NoDataView(text: "Вариантов нет")
-                Spacer()
-                if viewModel.isFiltersOn {
-                    FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
-                                         showTransfers: $viewModel.showTransfers,
-                                         isFiltersOn: viewModel.isFiltersOn)
-                }
+        Spacer()
+        switch viewModel.state {
+            
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .failed:
+            if let errorMode = viewModel.errorMode {
+                ErrorView(mode: errorMode)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             
-        } else {
+        case .loaded:
             ZStack(alignment: .bottom) {
-                RouteSegmentsListView(segments: viewModel.filteredSegments)
+                if viewModel.filteredSegments.isEmpty {
+                    NoDataView(text: Strings.RouteSearch.routesNotFound)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    
+                    RouteSegmentsListView(segments: viewModel.filteredSegments, carrierInfoService: carrierInfoService)
+                        .safeAreaInset(edge: .bottom) {
+                            Color.clear.frame(height: 80)
+                        }
+                }
                 
-                FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals, showTransfers: $viewModel.showTransfers, isFiltersOn: viewModel.isFiltersOn)
+                FilterNavigationView(selectedIntervals: $viewModel.selectedIntervals,
+                                     showTransfers: $viewModel.showTransfers,
+                                     isFiltersOn: viewModel.isFiltersOn)
             }
         }
     }
 }
 
+
 #Preview {
-    RouteListView(viewModel: RouteListViewModel(from: Station(title: "Москва", code: "", type: ""), to: Station(title: "Сочи", code: "", type: "")))
+    RouteListView(viewModel: RouteListViewModel(from: mockStations[0],
+                                                to: mockStations[1],
+                                                scheduleService: MockScheduleService(),
+                                                repository: MockRouteRepository()),
+                  carrierInfoService: MockCarrierInfoService())
 }

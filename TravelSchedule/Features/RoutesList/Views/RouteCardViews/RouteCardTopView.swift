@@ -12,22 +12,21 @@ struct RouteCardTopView: View {
     private var carrierName: String
     private var hasTransfers: Bool
     private var date: String
+    private var logo: String?
     
     // MARK: - Init
-    init(carrierName: String, hasTransfers: Bool, date: String) {
+    init(carrierName: String, hasTransfers: Bool, date: String, logo: String?) {
         self.carrierName = carrierName
         self.hasTransfers = hasTransfers
         self.date = date
+        self.logo = logo
     }
     
     // MARK: - Body
     var body: some View {
         HStack(alignment: .top) {
-            Image(systemName: "sun.min")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            LogoImageView(url: logo)
                 .frame(width: 38, height: 38)
-                .scaledToFit()
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
             
@@ -35,8 +34,8 @@ struct RouteCardTopView: View {
                 Text(carrierName)
                     .font(.system(size: 17, weight: .regular))
                     .lineLimit(1)
-                    
-                Text(hasTransfers ? "С пересадкой" : "")
+                
+                Text(hasTransfers ? Strings.RouteSearch.transfer : "")
                     .foregroundStyle(.redUniversal)
                     .font(.system(size: 12, weight: .regular))
             }
@@ -48,5 +47,5 @@ struct RouteCardTopView: View {
 }
 
 #Preview {
-    RouteCardTopView(carrierName: "РЖД", hasTransfers: true, date: "13 апреля")
+    RouteCardTopView(carrierName: "РЖД", hasTransfers: true, date: "13 апреля", logo: "")
 }

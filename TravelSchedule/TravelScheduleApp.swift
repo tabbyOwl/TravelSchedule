@@ -6,19 +6,41 @@
 //
 
 import SwiftUI
-import CoreData
+import KeychainSwift
+import SwiftData
+import OpenAPIURLSession
 
 @main
 struct TravelScheduleApp: App {
+
     @AppStorage("isDarkMode") private var isDarkMode = false
+
+    private let imageDownloader = ImageDownloader()
     
-    let persistenceController = PersistenceController.shared
+    private let factory: ServiceFactory
+
+    init() {
+        APIKeyBootstrap.setupIfNeeded()
+        do {
+            self.factory = try AppAssembly.makeFactory()
+        } catch {
+            fatalError("App init failed: \(error)")
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
-            TabBarView()
+            let viewModel = MainSearchViewModel()
+            TabBarView(factory: factory, viewModel: viewModel)
                 .preferredColorScheme(isDarkMode ? .dark : .light)
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.imageDownloader, imageDownloader)
         }
+        .modelContainer(for: [
+            SettlementEntity.self,
+            StationEntity.self,
+            SegmentEntity.self,
+            RouteEntity.self,
+            CarrierEntity.self
+        ])
     }
 }

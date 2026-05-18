@@ -16,8 +16,6 @@ struct StationSearchView: View {
     // MARK: - State
     @State private var viewModel: StationSearchViewModel
     
-   
-    
     // MARK: - Init
     init(station: Binding<Station>, isDismissing: Binding<Bool>, viewModel: StationSearchViewModel) {
         _station = station
@@ -30,23 +28,19 @@ struct StationSearchView: View {
         content
             .searchable(text: $viewModel.searchText,
                         placement: .navigationBarDrawer(displayMode: .always),
-                        prompt: "Введите запрос")
+                        prompt: Strings.Common.enterSearchText)
     }
     
     // MARK: - Content
     @ViewBuilder
     var content: some View {
-        if viewModel.isLoading {
-            ProgressView()
+        if viewModel.hasNoResults {
+            NoDataView(text: Strings.StationSearch.stationNotFound)
         } else {
-            if viewModel.hasNoResults {
-                NoDataView(text: "Станция не найдена")
-            } else {
-                StationSearchListView(station: $station,
-                                      isDismissing: $isDismissing,
-                                      stations: viewModel.filteredStations)
-                    .navigationTitle("Выбор станции")
-            }
+            StationSearchListView(station: $station,
+                                  isDismissing: $isDismissing,
+                                  stations: viewModel.filteredStations)
+            .navigationTitle(Strings.StationSearch.stationSelection)
         }
     }
 }
@@ -54,7 +48,9 @@ struct StationSearchView: View {
 
 #Preview {
     NavigationStack {
-        StationSearchView(station: .constant(Station(title: "", code: "", type: "")), isDismissing: .constant(false), viewModel: StationSearchViewModel(city: Settlement(title: "", stations: mockCitiesList[0].stations)))
+        StationSearchView(station: .constant(mockStations[0]),
+                          isDismissing: .constant(false),
+                          viewModel: StationSearchViewModel(stations: mockStations))
     }
 }
 

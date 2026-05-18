@@ -11,12 +11,12 @@ final class StoriesMaker {
     static func makeStoriesGroups() -> [StoryGroup] {
         let text = "Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text"
         return (0...8).map { index in
-        let storyNumber = index + 1
-          return StoryGroup(id: index, title: text, previewImage: "Story\(storyNumber)PreviewImage",
-                stories: [
-                    Story(id: index*10+1, backgroundImage: "Story\(storyNumber)FirstImage", title: text, description: text),
-                    Story(id: index*10+2, backgroundImage: "Story\(storyNumber)SecondImage", title: text, description: text)
-                ])
+            let storyNumber = index + 1
+            return StoryGroup(id: index, title: text, previewImage: "Story\(storyNumber)PreviewImage",
+                              stories: [
+                                Story(id: index*10+1, backgroundImage: "Story\(storyNumber)FirstImage", title: text, description: text),
+                                Story(id: index*10+2, backgroundImage: "Story\(storyNumber)SecondImage", title: text, description: text)
+                              ])
         }
     }
 }

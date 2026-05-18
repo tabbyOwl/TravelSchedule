@@ -65,6 +65,9 @@ struct StoriesHStackView: View {
 #Preview {
     @Previewable
     @Namespace var animation
-    StoriesHStackView(viewedStories: .constant([]), selectedGroup: .constant(mockStoryGroups.first), isPresented: .constant(false), animation: animation)
+    StoriesHStackView(viewedStories: .constant([]),
+                      selectedGroup: .constant(mockStoryGroups.first),
+                      isPresented: .constant(false),
+                      animation: animation)
 }
 

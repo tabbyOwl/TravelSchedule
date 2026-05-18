@@ -63,7 +63,7 @@ private struct MaskFragmentView: View {
 
 
 #Preview {
-    Color.teal
+    Color.blackUniversal
         .ignoresSafeArea()
         .overlay(
             ProgressBar(numberOfSections: 5, progress: 0.5)

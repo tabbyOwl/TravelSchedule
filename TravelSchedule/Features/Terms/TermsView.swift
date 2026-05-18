@@ -8,27 +8,19 @@
 import SwiftUI
 
 struct TermsView: View {
-    private let url = URL(string: TermsViewStrings.url)
-    
-    init() {
-            //Use this if NavigationBarTitle is with Large Font
-            UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.red]
-
-            //Use this if NavigationBarTitle is with displayMode = .inline
-            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.red]
-        }
+    private let url = Urls.termsURL
     
     var body: some View {
         Group {
-            if let url {
+            if let url = url {
                 WebView(url: url)
                     
             } else {
-                Text(TermsViewStrings.uncorrectUrl)
+                Text(Strings.Terms.invalidUrl)
             }
         }
         .ignoresSafeArea()
-        .navigationTitle(TermsViewStrings.title)
+        .navigationTitle(Strings.Terms.terms)
         .toolbarVisibility(.hidden, for: .tabBar)
         .toolbarBackground(.white, for: .navigationBar)
         

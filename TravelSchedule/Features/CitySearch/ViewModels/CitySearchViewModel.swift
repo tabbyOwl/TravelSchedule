@@ -5,30 +5,152 @@
 //  Created by Svetlana on 2026/4/16.
 //
 import Foundation
+import Logging
+import SwiftUI
+import SwiftData
+import OpenAPIRuntime
 
+@MainActor
 @Observable
 class CitySearchViewModel {
     
+    var searchText: String = ""
+    
     // MARK: - Private Properties
+    
+    private let logger = Logger(label: "CitySearchViewModel")
+    private let repository: CitiesWithStationsRepositoryProtocol
+    private let stationsListService: StationsListServiceProtocol
+    private(set) var errorMode: ErrorMode?
+    private(set) var state: ViewState = .loaded
+    private var displayedCities: [Settlement] = []
     private var cities: [Settlement] = []
-    private var _searchText: String = ""
-    private var citiesList = mockCitiesList
+    private var isLoading = false
     
     // MARK: - Computed Properties
-    var searchText: String {
-        get { _searchText }
-        set { _searchText = newValue }
-    }
-    
     var hasNoResults: Bool {
-        !_searchText.isEmpty && filteredCities.isEmpty
+        !searchText.isEmpty && filteredCities.isEmpty
     }
     
+    /// Фильтрует города по поисковому запросу и сортирует их по релевантности:
+    /// - Сначала города, название которых начинается с запроса
+    /// - Затем города, содержащие запрос в любом месте
+    /// - Внутри групп сортировка по алфавиту
     var filteredCities: [Settlement] {
-        _searchText.isEmpty ? citiesList: cities.filter { $0.title.localizedCaseInsensitiveContains(searchText)}
+        guard !searchText.isEmpty else { return displayedCities }
+        
+        let lowercasedQuery = searchText.lowercased()
+        
+        return cities
+            .filter {
+                $0.title.lowercased().contains(lowercasedQuery)
+            }
+            .sorted { lhs, rhs in
+                let lhsStarts = lhs.title.lowercased().hasPrefix(lowercasedQuery)
+                let rhsStarts = rhs.title.lowercased().hasPrefix(lowercasedQuery)
+                
+                if lhsStarts != rhsStarts {
+                    return lhsStarts
+                }
+                return lhs.title < rhs.title
+            }
     }
     
-    func loadCities() {
-           cities = citiesList
-       }
+    // MARK: - Init
+    init(
+        repository: CitiesWithStationsRepositoryProtocol,
+        stationsListService: StationsListServiceProtocol
+    ) {
+        
+        self.repository = repository
+        self.stationsListService = stationsListService
+    }
+    
+    // MARK: - Public methods
+    func loadCities() async {
+        
+        do {
+            try await updateCitiesFromDatabase()
+            
+            if !cities.isEmpty {
+                state = .loaded
+                logger.info("Loaded from database")
+                return
+            }
+        } catch {
+            logger.error("Data base error: \(error)")
+        }
+        await fetchAllStations()
+    }
+    
+    func loadCitiesFromDataBase() async {
+        
+    }
+    
+    func fetchAllStations() async {
+        
+        guard !isLoading else { return }
+        isLoading = true
+        defer { isLoading = false }
+        
+        errorMode = nil
+        state = .loading
+        do {
+            logger.info("Fetching stations...")
+            let allStations = try await stationsListService.getAllStations()
+            
+            let allSettlements = allStations.countries?
+                .flatMap { $0.regions ?? [] }
+                .flatMap { $0.settlements ?? [] }
+            
+            guard let allSettlements else { return }
+            
+            let filteredSettlements: [Components.Schemas.Settlement] = filterSettlements(allSettlements)
+            
+            logger.info("Successfully fetched stations list.")
+            
+            try await repository.save(filteredSettlements)
+            
+            try await updateCitiesFromDatabase()
+            
+            state = .loaded
+        } catch is CancellationError {}
+        catch {
+            logger.error("\(error)")
+            state = .failed
+            errorMode = error.asErrorMode
+        }
+    }
+    
+    //MARK: - Private methods
+    private func filterSettlements(_ settlements: [Components.Schemas.Settlement]) -> [Components.Schemas.Settlement] {
+        settlements.compactMap { settlement in
+            
+            let filteredStations = settlement.stations?.filter(isValidTrainStation) ?? []
+            
+            guard !filteredStations.isEmpty else {
+                return nil
+            }
+            
+            var newSettlement = settlement
+            newSettlement.stations = filteredStations
+            
+            return newSettlement
+        }
+    }
+    
+    private func isValidTrainStation(_ station: Components.Schemas.Station) -> Bool {
+        let validTypes = ["train_station", "station"]
+        
+        return validTypes.contains(station.station_type ?? "")
+        && !(station.direction?.isEmpty ?? true)
+    }
+    
+    private func updateCitiesFromDatabase() async throws {
+        let data = try await repository.load()
+        
+        self.displayedCities = data.displayedCities
+        self.cities = data.cities
+    }
+    
 }
