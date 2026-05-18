@@ -31,6 +31,6 @@ final class MockRouteRepository: RouteRepositoryProtocol {
         return mockSegments
     }
     
-    func saveSchedule(for roureId: String, segments: [Components.Schemas.Segment]) async throws {}
+    func saveSchedule(for routeId: String, segments: [Components.Schemas.Segment]) async throws {}
     
 }

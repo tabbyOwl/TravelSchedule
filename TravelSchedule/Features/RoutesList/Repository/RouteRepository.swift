@@ -11,7 +11,7 @@ import Foundation
 
 protocol RouteRepositoryProtocol {
     func loadSchedule(for routeId: String) async throws -> [Segment]
-    func saveSchedule(for roureId: String,  segments: [Components.Schemas.Segment]) async throws
+    func saveSchedule(for routeId: String,  segments: [Components.Schemas.Segment]) async throws
 }
 @ModelActor
 actor RouteRepository: RouteRepositoryProtocol {
@@ -45,7 +45,7 @@ actor RouteRepository: RouteRepositoryProtocol {
     
     func saveSchedule(for routeId: String, segments: [Components.Schemas.Segment]) throws {
         logger.info("Saving to swiftData...")
-        print("SAVE \(routeId)")
+        
         let descriptor = FetchDescriptor<RouteEntity>(
             predicate: #Predicate { $0.id == routeId }
         )
@@ -82,9 +82,6 @@ actor RouteRepository: RouteRepositoryProtocol {
                 segment.route = routeEntity
             }
             routeEntity.segments.append(entity)
-            
-            let all = try modelContext.fetch(FetchDescriptor<RouteEntity>())
-            print(all.count)
         }
         
         try modelContext.save()

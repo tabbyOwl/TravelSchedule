@@ -13,7 +13,7 @@ protocol CitiesWithStationsRepositoryProtocol {
     func save(_ settlements: [Components.Schemas.Settlement]) async throws
 }
 
-struct CitiesData {
+struct CitiesData: Sendable {
     let cities: [Settlement]
     let displayedCities: [Settlement]
 }

@@ -5,7 +5,7 @@
 //  Created by Svetlana on 2026/4/20.
 //
 
-struct Carrier: Codable {
+struct Carrier: Codable, Sendable {
     let title: String
     let phone: String?
     let email: String?
